@@ -10,6 +10,9 @@ session_start();
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
   <title>TASK LIST | Dashboard 3</title>
+  <script src=
+"https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js">
+  </script>
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
@@ -199,12 +202,22 @@ to get the desired effect
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                  <td>1</td>
-                  <td>task001</td>
-                  <td>10 May</td>
-                  <td><button class="btn btn-primary">Start</button></td>
+                    <?php 
+                    $query = "SELECT * FROM active_task";
+                    while($data = mysqli_fetch_assoc(mysqli_query($conn, $query))){
+                      ?>
+                      <tr>
+                  <td><?=$data['id'] ?></td>
+                  <td><?=$data['work_id'] ?></td>
+                  <td><?=$data['created_at'] ?></td>
+                  <td>
+                  <input id="taskid" type="hidden" name="task" value="<?=$data['work_id'] ?>">  
+                  <button onclick="start()" class="btn btn-primary">Start</button></td>
                   </tr>
+                      <?php
+                    }
+                    ?>
+                  
                   </tbody>
                 </table>
               </div>
@@ -264,6 +277,33 @@ to get the desired effect
 <script src="dist/js/demo.js"></script>
 <script src="dist/js/pages/dashboard3.js"></script>
 <script>
+
+function start(){
+ 
+    swal("Success", "Task Started Succesfully", "success", {
+      button: "OK",
+    });
+
+    var formData = {
+                task: $("#taskid").val()
+            };
+
+    $.ajax({
+                type: "POST",
+                url: "startTask.php",
+                data: formData,
+                dataType: "json",
+                encode: true,
+            }).done(function(data) {
+                $("#response").html(data.message);
+            }).fail(function(jqXHR, textStatus) {
+                $("#response").html("Request failed: " + textStatus);
+            });
+       
+  
+}
+
+
 //   $(function () {
 //     $("#example1").DataTable({
 //       "responsive": true, "lengthChange": true, "autoWidth": false,
