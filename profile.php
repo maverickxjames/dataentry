@@ -192,7 +192,7 @@ if (!$user) {
         </div>
         <div class="profile-info">
             <div class="profile-picture">
-                <img src="profile.jpg" alt="Profile Picture">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile Picture">
                 <button class="btn-change-photo">Change Photo</button>
                 <button class="btn-remove-photo">Remove</button>
             </div>

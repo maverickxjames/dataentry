@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Profile Update</title>
+<script src=
+"https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js">
+</script>
+
+</head>
+<body>
+    
 <?php
 session_start();
 
@@ -16,7 +27,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Check if form fields are set
     if (!isset($_POST['username']) || !isset($_POST['email']) || !isset($_POST['phone'])) {
-        echo "All fields are required.";
+        ?>
+        <script>
+            swal("Error", "All Fields Required", "error", {
+                button: "Go Back",
+
+}).then(() => {
+    window.location = "profile.php";
+});
+        </script>
+        <?php 
         exit();
     }
 
@@ -27,39 +47,76 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validate the data
     if (empty($username) || empty($email) || empty($phone)) {
-        echo "All fields are required.";
+        ?>
+        <script>
+            swal("Error", "All Fields Required", "error", {
+                button: "Go Back",
+
+}).then(() => {
+    window.location = "profile.php";
+});
+        </script>
+        <?php 
         exit();
     }
 
     // Validate email format
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo "Invalid email format.";
+        ?>
+        <script>
+            swal("Error", "Invalid Email Format", "error", {
+                button: "Go Back",
+
+}).then(() => {
+    window.location = "profile.php";
+});
+        </script>
+        <?php 
         exit();
     }
 
     // Prepare and execute SQL statement
-    $sql = "UPDATE user_info SET username=?, email_id=?, phone_no=? WHERE user_id=?";
-    $stmt = $conn->prepare($sql);
-    if ($stmt) {
-        $stmt->bind_param("sssi", $username, $email, $phone, $user_id);
-        
-        if ($stmt->execute()) {
-            if ($stmt->affected_rows > 0) {
-                echo "Profile updated successfully!";
-            } else {
-                echo "No changes were made.";
-            }
-        } else {
-            echo "Error updating profile: " . $stmt->error;
-        }
+    $sql = "UPDATE user_info SET username='$username', email_id='$email', phone_no='$phone' WHERE user_id='$user_id'";
+    if ($conn->query($sql) === TRUE) {
+        ?>
+        <script>
+            swal("Success", "Profile Updated Successfully", "success", {
+	button: "Go Back",
 
-        $stmt->close();
+	}).then(() => {
+        window.location = "profile.php";
+    });
+        </script>
+        <?php 
     } else {
-        echo "Error preparing statement: " . $conn->error;
+        ?>
+        <script>
+            swal("Error", "<?=$conn->error ?>", "error", {
+                button: "Go Back",
+
+}).then(() => {
+    window.location = "profile.php";
+});
+        </script>
+        <?php 
+       
     }
 
     $conn->close();
 } else {
-    echo "Invalid request method.";
+    ?>
+        <script>
+            swal("Error", "Invalid Request Method", "error", {
+                button: "Go Back",
+
+}).then(() => {
+    window.location = "profile.php";
+});
+        </script>
+        <?php 
 }
 ?>
+
+
+</body>
+</html>

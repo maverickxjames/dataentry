@@ -1,4 +1,10 @@
-<?php include('header.php'); 
+<?php
+include('header.php');
+
+// Start session if not already started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -8,6 +14,7 @@ if (!isset($_SESSION['user_id'])) {
 
 // Get the logged-in user's ID
 $user_id = $_SESSION['user_id'];
+$workid = $_GET['task'];
 ?>
 
 <!DOCTYPE html>
@@ -37,70 +44,89 @@ $user_id = $_SESSION['user_id'];
             background-color: #f9f9f9; /* Alternate row background color */
         }
     </style>
-
-    <script>
-        function saveForm() {
-            // Add JavaScript logic for saving form data here
-            document.getElementById('myForm').submit(); // Example: submit form
-        }
-    </script>
 </head>
 <body>
    
     <main>
         <div class="container">
             <h1>Raw Data | Today</h1>
-            <div class="fixed-data">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>S.No.</th> <!-- Serial Number Header -->
-                            <th>Column 1</th>
-                            <th>Column 2</th>
-                            <th>Column 3</th>
-                            <th>Column 4</th>
-                            <th>Column 5</th>
-                            <th>Column 6</th>
-                            <th>Column 7</th>
-                            <th>Column 8</th>
-                            <th>Column 9</th>
-                            <th>Column 10</th>
-                            <th>Column 11</th>
-                            <th>Column 12</th>
-                            <th>Column 13</th>
-                            <th>Column 14</th>
-                            <th>Column 15</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    include 'db.php';
+            <?php
+            include 'db.php';
 
-                    // Fetch fixed data from the database
-                    $sql = "SELECT col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12, col13, col14, col15 FROM fixed_data";
-                    $result = $conn->query($sql);
+            // Fetch data from the active_task table
+            $sql = "SELECT user_id, created_at, work_id, pdf_id, status FROM active_task WHERE user_id = '$user_id' AND work_id = '$workid'";
+            $result = mysqli_query($conn, $sql);
 
-                    $serial_number = 1; // Initialize serial number
+            $tasks = [];
 
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            echo "<tr>";
-                            echo "<td style='background-color: #f0f0f0;'>" . $serial_number . "</td>"; // Greyish background for serial number
-                            foreach ($row as $value) {
-                                echo "<td>" . htmlspecialchars($value) . "</td>";
-                            }
-                            echo "</tr>";
-                            $serial_number++; // Increment serial number
+            while ($row = $result->fetch_assoc()) {
+                if($row['status'] != 'submitted') {
+                    exit("Task not submitted yet");
+                }
+                $tasks[] = $row;
+            }
+
+            foreach ($tasks as $task) {
+                echo "<div>";
+                echo "<p>User ID: " . htmlspecialchars($task['user_id']) . "</p>";
+                echo "<p>Date: " . htmlspecialchars($task['created_at']) . "</p>";
+                echo "<p>Work ID: " . htmlspecialchars($task['work_id']) . "</p>";
+                echo "<p>PDF ID: " . htmlspecialchars($task['pdf_id']) . "</p>";
+                echo "</div>";
+
+                // Fetch data from the data_entry table based on work_id
+                $sql = "SELECT * FROM data_entry WHERE work_id = '$workid' AND user_id = '$user_id'";
+                $result = mysqli_query($conn, $sql);
+
+                echo "<div class='fixed-data'>";
+                echo "<table class='table table-bordered'>";
+                echo "<thead>";
+                echo "<tr>";
+                echo "<th>S.No.</th>"; // Serial Number Header
+                echo "<th>Column 1</th>";
+                echo "<th>Column 2</th>";
+                echo "<th>Column 3</th>";
+                echo "<th>Column 4</th>";
+                echo "<th>Column 5</th>";
+                echo "<th>Column 6</th>";
+                echo "<th>Column 7</th>";
+                echo "<th>Column 8</th>";
+                echo "<th>Column 9</th>";
+                echo "<th>Column 10</th>";
+                echo "<th>Column 11</th>";
+                echo "<th>Column 12</th>";
+                echo "<th>Column 13</th>";
+                echo "<th>Column 14</th>";
+                echo "<th>Column 15</th>";
+                echo "</tr>";
+                echo "</thead>";
+                echo "<tbody>";
+
+                $serial_number = 1; // Initialize serial number
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td style='background-color: #f0f0f0;'>" . $serial_number . "</td>"; // Greyish background for serial number
+                        for ($i = 1; $i <= 15; $i++) {
+                            echo "<td>" . htmlspecialchars($row['col_' . $i]) . "</td>";
                         }
-                    } else {
-                        echo "<tr><td colspan='15'>No data available</td></tr>";
+                        echo "</tr>";
+                        $serial_number++; // Increment serial number
                     }
-                    $conn->close();
-                    ?>
-                    </tbody>
-                </table>
-            </div>
-            <br>
+                } else {
+                    echo "<tr><td colspan='15'>No data available</td></tr>";
+                }
+                echo "</tbody>";
+                echo "</table>";
+                echo "</div>";
+
+                echo "<p>Status: " . htmlspecialchars($task['status']) . "</p>";
+                echo "<br>";
+            }
+
+            $conn->close();
+            ?>
         </div>
     </main>
 </body>
