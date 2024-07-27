@@ -203,7 +203,7 @@ to get the desired effect
                   </thead>
                   <tbody>
                     <?php 
-                    $query = "SELECT * FROM active_task WHERE status = 'pending'";
+                    $query = "SELECT * FROM active_task WHERE status = 'pending' OR user_id = '".$_SESSION['user_id']."' ORDER BY id DESC";
                     $run = mysqli_query($conn, $query);
                     while($data = mysqli_fetch_assoc($run)){
                       ?>
@@ -212,8 +212,24 @@ to get the desired effect
                   <td><?=$data['work_id'] ?></td>
                   <td><?=$data['created_at'] ?></td>
                   <td>
-                  <input id="taskid" type="hidden" name="task" value="<?=$data['work_id'] ?>">  
-                  <button onclick="start()" class="btn btn-primary">Start</button></td>
+                  <input id="taskid" type="hidden" name="task" value="<?=$data['work_id'] ?>">
+                  <?php 
+                  if($data['status'] == 'pending'){
+                    ?>
+                    <button class="btn btn-primary" onclick="start()">Start</button></td>
+                    <?php
+                  }elseif($data['status'] == 'working' && $data['user_id'] == $_SESSION['user_id']){
+                    ?>
+                    <button class="btn btn-danger" disabled>Working</button></td>
+                    <?php
+                  }
+                  elseif($data['status'] == 'submitted'  && $data['user_id'] == $_SESSION['user_id']){
+                    ?>
+                    <button class="btn btn-success" disabled>Completed</button></td>
+                    <?php
+                  }
+                  ?>  
+                  </td>
                   </tr>
                       <?php
                     }
@@ -281,9 +297,7 @@ to get the desired effect
 
 function start(){
  
-    swal("Success", "Task Started Succesfully", "success", {
-      button: "OK",
-    });
+    
 
     var formData = {
                 task: $("#taskid").val()
@@ -300,6 +314,12 @@ function start(){
             }).fail(function(jqXHR, textStatus) {
                 $("#response").html("Request failed: " + textStatus);
             });
+
+            swal("Success", "Task Started Succesfully", "success", {
+      button: "OK",
+    }).then(()=> {
+      location.reload();
+    });
        
   
 }
