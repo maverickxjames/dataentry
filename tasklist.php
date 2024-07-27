@@ -204,7 +204,8 @@ to get the desired effect
                   <tbody>
                     <?php 
                     $query = "SELECT * FROM active_task";
-                    while($data = mysqli_fetch_assoc(mysqli_query($conn, $query))){
+                    $run = mysqli_query($conn, $query);
+                    while($data = mysqli_fetch_assoc($run)){
                       ?>
                       <tr>
                   <td><?=$data['id'] ?></td>
