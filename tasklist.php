@@ -203,7 +203,7 @@ to get the desired effect
                   </thead>
                   <tbody>
                     <?php 
-                    $query = "SELECT * FROM active_task";
+                    $query = "SELECT * FROM active_task WHERE status = 'pending'";
                     $run = mysqli_query($conn, $query);
                     while($data = mysqli_fetch_assoc($run)){
                       ?>
