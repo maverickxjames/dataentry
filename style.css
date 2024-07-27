@@ -1,0 +1,187 @@
+
+
+
+/* style for fixed data table */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    color: #333;
+}
+.container {
+    width: 150%;
+    margin: 0 auto;
+    text-align: center;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+h1, h2 {
+    color: #1f78d1;
+}
+.fixed-data, .input-data, .submitted-data {
+    margin-top: 20px;
+}
+.fixed-data {
+    overflow-x: auto;
+    overflow-y: auto;
+    white-space: nowrap;
+    padding: 10px;
+    width: 99%;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    height: 320px; /* Adjust the height as needed */
+    resize: both;
+}
+.fixed-data span {
+    display: inline-block;
+    padding: 5px;
+    border: 1px solid #ddd;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border-radius: 3px;
+    background-color: #e9ecef;
+}
+/* .input-data input {
+    width: 200px;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+} */
+.input-data input[type="submit"] {
+    background-color: #1f78d1;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.input-data input[type="submit"]:hover {
+    background-color: #155a9a;
+}
+.submitted-data {
+    margin-top: 20px;
+}
+
+tr td{
+    padding: 0px 1px;
+    /* background:#000;  */
+    user-select: none;
+}
+
+
+/* css for workarea form */
+
+.table-data {
+    height: 40vh;
+    overflow: scroll;
+    resize: both;
+}
+
+table.table tr th {
+    background: #eee;
+    text-transform: uppercase;
+}
+
+form p {
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: 15px;
+    margin-bottom: 5px
+    
+}
+
+form .form-control {
+    border-bottom: 1px solid #000 !important;
+    border-radius: 2px;
+}
+
+.table-data .card {
+    padding: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* css of upload.php */
+
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+form{
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+input[type="file"]{
+    margin-bottom: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Basic styles for the menu */
+
+.navbar {
+    background-color: #333;
+    padding: 10px 20px;
+}
+
+.nav-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-list li {
+    display: inline;
+    margin-right: 10px;
+}
+
+.nav-list li a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 12px;
+}
+
+.nav-list li a:hover {
+    background-color: #555;
+}
