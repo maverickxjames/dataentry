@@ -84,7 +84,7 @@ $status_color = ($user['status'] == 'admin') ? 'red' : 'green';
             if ($user_type == 'admin') {
             ?>
               <li class="nav-item">
-                <a href="tasklist.php" class="nav-link">
+                <a href="assignTask.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Assign Task</p>
                 </a>
