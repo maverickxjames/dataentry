@@ -203,7 +203,7 @@ to get the desired effect
                   </thead>
                   <tbody>
                     <?php 
-                    $query = "SELECT * FROM active_task WHERE status = 'pending' OR user_id = '".$_SESSION['user_id']."' ORDER BY id DESC";
+                    $query = "SELECT * FROM active_task WHERE status = 'pending' AND user_id = '".$_SESSION['user_id']."' ORDER BY id DESC";
                     $run = mysqli_query($conn, $query);
                     while($data = mysqli_fetch_assoc($run)){
                       ?>

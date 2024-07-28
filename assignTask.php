@@ -262,50 +262,72 @@ to get the desired effect
               </div> -->
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>Sr. No</th>
-                    <th>Task ID</th>
-                    <th>Date</th>
-                    <th>Assign User</th>
-                    <th>Action</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                    <?php 
-                    $query = "SELECT * FROM active_task WHERE status = 'pending' ORDER BY id DESC";
-                    $run = mysqli_query($conn, $query);
-                    while($data = mysqli_fetch_assoc($run)){
-                      ?>
-                      <tr>
-                  <td><?=$data['id'] ?></td>
-                  <td><?=$data['work_id'] ?></td>
-                  <td><?=$data['created_at'] ?></td>
-                  <td>
-                  <select class="select form-control">
-                    <option value="">Select User</option>
-                    <?php 
-                    $query1 = "SELECT * FROM user_info";
-                    $run1 = mysqli_query($conn, $query1);
-                    while($data1 = mysqli_fetch_assoc($run1)){
-                      ?>
-                      <option value="<?=$data1['user_id'] ?>"><?=$data1['username'] ?></option>
-                      <?php
-                    }
-                    ?>
-                  </select>
-                  <td>
-                  <button class="btn btn-primary">Assign</button>
-                  </td>
-                </td>
-                  
+              <table id="example1" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Sr. No</th>
+                <th>Task ID</th>
+                <th>Date</th>
+                <th>Assign User</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php 
+            $query = "SELECT * FROM active_task WHERE status = 'pending' ORDER BY id DESC";
+            $run = mysqli_query($conn, $query);
+            $id = 1;
+            while($data = mysqli_fetch_assoc($run)){
+                ?>
+                <tr>
+                    <td><?=$id ?></td>
+                    <td><?=$data['work_id'] ?></td>
+                    <td><?=$data['created_at'] ?></td>
+                    <td>
+                        <?php 
+                        if($data['user_id'] == null || $data['username'] == null){
+                           ?>
+                           <select name="assign<?=$id ?>" class="select form-control">
+                            <option value="">Select User</option>
+                            <?php 
+                            $query1 = "SELECT * FROM user_info";
+                            $run1 = mysqli_query($conn, $query1);
+                            while($data1 = mysqli_fetch_assoc($run1)){
+                                ?>
+                                <option value="<?=$data1['user_id'] ?>"><?=$data1['username'] ?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
+                           <?php 
+                        } else {
+                            echo $data['username'] . " (ID: " . $data['user_id'] . ")";
+                        }
+                        ?>
+                        
+                    </td>
+                    <td>
+                        <input type="hidden" name="work_id<?=$id?>" value="<?=$data['work_id'] ?>">
+                        <?php 
+                        if($data['user_id'] == "" || $data['username'] == ""){
+                            ?>
+                            <button class="btn btn-primary" onclick="assignTask(<?=$id?>)">Assign</button>
+                            <?php
+                        } else {
+                            ?>
+                            <button class="btn btn-success">Assigned</button>
+                            <?php
+                        }
+                        ?>
+                    </td>
                 </tr>
-                      <?php
-                    }
-                    ?>
-                  </tbody>
-                </table>
+                <?php
+                $id++;
+            }
+            ?>
+        </tbody>
+    </table>
+
               </div>
               <!-- /.card-body -->
             </div>
@@ -363,24 +385,16 @@ to get the desired effect
 <script src="dist/js/demo.js"></script>
 <script src="dist/js/pages/dashboard3.js"></script>
 <script>
-  $(document).ready(function() {
-    $('.select').select2();
-  });
-</script>
 
-<script>
-
-function start(){
- 
-    
-
-    var formData = {
-                task: $("#taskid").val()
+function assignTask(id) {
+            var formData = {
+                task: $("select[name=assign" + id + "]").val(),
+                work_id: $("input[name=work_id" + id + "]").val()
             };
 
-    $.ajax({
+            $.ajax({
                 type: "POST",
-                url: "startTask.php",
+                url: "assignTasks.php",
                 data: formData,
                 dataType: "json",
                 encode: true,
@@ -390,14 +404,23 @@ function start(){
                 $("#response").html("Request failed: " + textStatus);
             });
 
-            swal("Success", "Task Started Succesfully", "success", {
-      button: "OK",
-    }).then(()=> {
-      location.reload();
-    });
-       
-  
-}
+            swal("Success", "Task Assigned", "success", {
+                button: "OK",
+            }).then(() => {
+                location.reload();
+            });
+        }
+
+
+
+  $(document).ready(function() {
+    $('.select').select2();
+  });
+</script>
+
+<script>
+
+
 
 
 //   $(function () {
