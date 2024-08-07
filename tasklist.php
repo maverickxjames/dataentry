@@ -1,5 +1,25 @@
-<?php 
+<?php
 session_start();
+
+// Include database connection
+include('db.php');
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login/login.php");
+    exit();
+}
+
+// Get the logged-in user's ID
+$user_id = $_SESSION['user_id'];
+
+$sql = "SELECT * FROM user_info WHERE user_id='$user_id'";
+$user = mysqli_fetch_assoc(mysqli_query($conn, $sql));
+if (!$user) {
+    die("No user found with ID $user_id");
+}
+
+$wallet_amount = $user['wallet_amount'];
 ?>
 
 <!DOCTYPE html>
@@ -22,6 +42,18 @@ session_start();
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <style>
+.navbar .wallet {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.wallet-icon {
+    margin-right: 5px;
+}
+</style>
+
 </head>
 <!--
 BODY TAG OPTIONS:
@@ -46,7 +78,7 @@ to get the desired effect
         <a href="index3.html" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+        <a href="contact.php" class="nav-link">Contact</a>
       </li>
     </ul>
 
@@ -149,10 +181,18 @@ to get the desired effect
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
       </li>
-      <li class="nav-item">
+      <li class="nav-item dropdown">
+        <a class="nav-link" href="#">
+          <div class="wallet">
+            <i class="fas fa-wallet wallet-icon"></i>
+            <span class="right badge badge-info right">$<?php echo htmlspecialchars(number_format($wallet_amount, 2)); ?></span>
+          </div>
+        </a>
+      </li> 
+      <!-- <li class="nav-item">
         <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"><i
             class="fas fa-th-large"></i></a>
-      </li>
+      </li> -->
     </ul>
   </nav>
   <!-- /.navbar -->

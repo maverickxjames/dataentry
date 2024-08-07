@@ -7,8 +7,8 @@ $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "dataentry";
-$port = 9906;
-// $port = 3306;
+// $port = 9906;
+$port = 3306;
 
 try {
     $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $username, $password);

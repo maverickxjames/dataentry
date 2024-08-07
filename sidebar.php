@@ -1,30 +1,62 @@
 <?php
-
 // Include database connection
 include('db.php');
-
+// session_start();
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-  header("Location: login/login.php");
-  exit();
+    header("Location: login/login.php");
+    exit();
 }
 
 // Get the logged-in user's ID
 $user_id = $_SESSION['user_id'];
 $user_type = $_SESSION['user_type'];
 
-$sql = "SELECT * FROM user_info WHERE user_id='$user_id'";
-$user = mysqli_fetch_assoc(mysqli_query($conn, $sql));
+// Prepare and execute query to get user information
+$stmt = $conn->prepare("SELECT * FROM user_info WHERE user_id = ?");
+$stmt->bind_param("s", $user_id);
+$stmt->execute();
+$user = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+
 if (!$user) {
-  die("No user found with ID $user_id");
+    header("Location: login/login.php"); // Redirect if no user found
+    exit();
 }
 
 // Determine the user's status
 $user_status = ($user['status'] == 'admin') ? 'Admin' : 'User';
 $status_color = ($user['status'] == 'admin') ? 'red' : 'green';
 
+// Prepare and execute query to count the total number of users
+$stmt = $conn->prepare("SELECT COUNT(*) AS total_users FROM user_info WHERE status = 'user'");
+$stmt->execute();
+$row_users = $stmt->get_result()->fetch_assoc();
+$total_users = $row_users['total_users'];
+$stmt->close();
+
+// Prepare and execute query to count the total number of admins
+$stmt = $conn->prepare("SELECT COUNT(*) AS total_admins FROM user_info WHERE status = 'admin'");
+$stmt->execute();
+$row_admins = $stmt->get_result()->fetch_assoc();
+$total_admins = $row_admins['total_admins'];
+$stmt->close();
 ?>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://localhost/example/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+</head>
+<body>
 
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -89,33 +121,27 @@ $status_color = ($user['status'] == 'admin') ? 'red' : 'green';
                   <p>Assign Task</p>
                 </a>
               </li>
-            <?php
-            } else {
-            ?>
               <li class="nav-item">
                 <a href="tasklist.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Start Working</p>
+                  <p>pending User Report</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="task.php" class="nav-link">
+                <a href="tasklist.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Task History</p>
+                  <p>User Task History</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="reports.php" class="nav-link">
+                <a href="tasklist.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Final Reports</p>
+                  <p>User Report History</p>
                 </a>
               </li>
-            <?php
-            }
-            ?>
           </ul>
         </li>
-        <li class="nav-item">
+          <li class="nav-item">
           <a href="upload.php" class="nav-link">
             <i class="nav-icon far fa-plus-square"></i>
             <p>
@@ -123,6 +149,26 @@ $status_color = ($user['status'] == 'admin') ? 'red' : 'green';
               <span class="right badge badge-info right"> + </span>
             </p>
           </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="users.php" class="nav-link">
+             <i class="nav-icon fas fa-users"></i>
+            <p>
+             Users
+             <span class="right badge badge-success green-badge"> <?php echo $total_users; ?></span>
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="admins.php" class="nav-link">
+                <i class="nav-icon fas fa-user-shield"></i>
+                <p>
+                    View Admins
+                    <span class="right badge badge-success green-badge"> <?php echo $total_admins; ?></span>
+                </p>
+            </a>
         </li>
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link">
@@ -152,6 +198,63 @@ $status_color = ($user['status'] == 'admin') ? 'red' : 'green';
               </a>
             </li>
           </ul>
+        </li>
+            <?php
+            } else {
+            ?>
+              <li class="nav-item">
+                <a href="tasklist.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Start Working</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="task.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Task History</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="reports.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Final Reports</p>
+                </a>
+              </li>
+            </ul>
+              <li class="nav-item">
+                 <a href="contact.php" class="nav-link">
+                   <i class="nav-icon fas fa-wallet"></i>
+                   <p>
+                     wallet 
+                   </p>
+                 </a>
+              </li>
+               <li class="nav-item">
+                 <a href="contact.php" class="nav-link">
+                   <i class="nav-icon fas fa-envelope"></i>
+                   <p>
+                     Get Help
+                   </p>
+                 </a>
+               </li>
+               <li class="nav-item">
+                 <a href="about_us.php" class="nav-link">
+                   <i class="nav-icon fas fa-file-alt"></i>
+                   <p>
+                     About Us
+                     <!-- <span class="right badge badge-danger rounded-circle"> i </span> -->
+                   </p>
+                 </a>
+               </li>
+        </li>
+      <?php } ?>
+         <li class="nav-item">
+           <a href="profile.php" class="nav-link">
+             <i class="nav-icon fas fa-user"></i>
+             <p>
+              Profile
+             </p>
+           </a>
         </li>
         <li class="nav-item">
           <?php
