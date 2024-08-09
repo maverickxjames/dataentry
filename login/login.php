@@ -29,7 +29,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) {
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hashing the password
         
         // Randomly select a profile picture from the user_pic directory
-        $random_pic = $pics[array_rand($pics)];
+        $random_pic = 'default.png';
+        // $random_pic = $pics[array_rand($pics)];
 
         // Ensure wallet_amount is set to a default value
         $wallet_amount = 0.00;
