@@ -46,7 +46,6 @@ if (!$user) {
             align-items: center;
             margin-bottom: 20px;
         }
-        
         .profile-header h2 {
             margin: 0;
         }
@@ -110,14 +109,11 @@ if (!$user) {
             text-align: center;
             text-decoration: none;
             width: 150px; /* Adjust width as needed */
-          
         }
-
         .button-container {
             display: flex;
             gap: 10px; /* Adjust the gap value as needed */
         }
-        
         .btn-home {
             background-color: #4CAF50;
             color: white;
@@ -126,8 +122,7 @@ if (!$user) {
             cursor: pointer;
             border-radius: 5px;
             width: auto; /* Adjust width as needed */
-         }
-
+        }
         .btn-logout {
             background-color: #d92618;
             color: white;
@@ -138,8 +133,7 @@ if (!$user) {
             float: right;
             margin-top: 0;
             text-decoration: none; /* Remove underline */
-         }
-
+        }
         .btn-change-password {
             display: inline-block;
             width: auto;
@@ -161,10 +155,8 @@ if (!$user) {
             cursor: pointer;
             border-radius: 5px;
             width: auto; /* Adjust width as needed */
-            /* margin-right: 10px; Add margin to separate from the Logout button */
             text-decoration: none; /* Remove underline */
         }
-        
         .btn-change-password {
             background-color: #e67e22;
             width: 100%;
@@ -177,6 +169,42 @@ if (!$user) {
             cursor: pointer;
             color: #777;
             margin-left: 10px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+        }
+        .modal-content img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 5px;
+            cursor: pointer;
+        }
+         /* Your existing CSS */
+        .disabled-field {
+            background-color: #f0f0f0; /* Light grey background */
+            border: 1px solid #ddd; /* Light grey border */
+            color: #999; /* Light grey text color */
+            cursor: not-allowed; /* Cursor indicating no action */
+        }
+        .edit-icon {
+            cursor: pointer; /* Ensure pencil icon is clickable */
+            color: #777; /* Color for the pencil icon */
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -192,35 +220,35 @@ if (!$user) {
         </div>
         <div class="profile-info">
             <div class="profile-picture">
-                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile Picture">
-                <button class="btn-change-photo">Change Photo</button>
-                <button class="btn-remove-photo">Remove</button>
+                <img src="user_pic/<?php echo htmlspecialchars($user['profile_pic']); ?>" alt="Profile Picture" id="profile_pic">
+                <button class="btn-change-photo" onclick="openModal()">Change Photo</button>
             </div>
             <div class="profile-details">
                 <label for="wallet_amount">Wallet Balance</label>
                 <div class="field-container">
                     <input type="text" id="wallet_amount" name="wallet_amount" value="<?php echo htmlspecialchars($user['wallet_amount']); ?>" disabled>
                 </div>
-                <form id="profileForm" action="update_profile.php" method="POST">
+                <form id="profileForm" action="update_profile.php" method="POST" onsubmit="removeDisabledFields()">
                     <label for="user_id">User ID</label>
                     <div class="field-container">
                         <input type="text" id="user_id" name="user_id" value="<?php echo htmlspecialchars($user['user_id']); ?>" disabled>
                     </div>
                     <label for="username">Username</label>
                     <div class="field-container">
-                        <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>">
-                        <span class="edit-icon">&#9998;</span>
+                        <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" class="disabled-field">
+                        <span class="edit-icon" onclick="confirmEdit('username')">&#9998;</span>
                     </div>
                     <label for="email">Email</label>
                     <div class="field-container">
-                        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email_id']); ?>">
-                        <span class="edit-icon">&#9998;</span>
+                        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email_id']); ?>" class="disabled-field">
+                        <span class="edit-icon" onclick="confirmEdit('email')">&#9998;</span>
                     </div>
                     <label for="phone">Phone Number</label>
                     <div class="field-container">
-                        <input type="text" id="phone" name="phone" value="<?php echo htmlspecialchars($user['phone_no']); ?>">
-                        <span class="edit-icon">&#9998;</span>
+                        <input type="text" id="phone" name="phone" value="<?php echo htmlspecialchars($user['phone_no']); ?>" class="disabled-field">
+                        <span class="edit-icon" onclick="confirmEdit('phone')">&#9998;</span>
                     </div>
+                    <input type="hidden" id="selectedProfilePic" name="profile_pic" value="<?php echo htmlspecialchars($user['profile_pic']); ?>">
                     <button type="button" class="btn-change-password" onclick="togglePasswordFields()">Change Password</button>
                     <div class="password-fields">
                         <label for="current_password">Current Password</label>
@@ -244,41 +272,72 @@ if (!$user) {
             </div>
         </div>
     </div>
+    <div id="profilePicModal" class="modal">
+        <div class="modal-content">
+            <h3>Select Profile Picture</h3>
+            <!-- Example profile pictures -->
+            <img src="user_pic/profile1.png" alt="Profile 1" onclick="selectProfilePic('profile1.png')">
+            <img src="user_pic/profile2.png" alt="Profile 2" onclick="selectProfilePic('profile2.png')">
+            <img src="user_pic/profile3.png" alt="Profile 3" onclick="selectProfilePic('profile3.png')">
+            <br>
+            <button onclick="closeModal()">Close</button>
+        </div>
+    </div>
     <script>
+        function togglePasswordFields() {
+            const passwordFields = document.querySelector('.password-fields');
+            passwordFields.style.display = passwordFields.style.display === 'block' ? 'none' : 'block';
+        }
+
         function togglePasswordVisibility(fieldId) {
-            var field = document.getElementById(fieldId);
-            var icon = field.nextElementSibling.querySelector('i');
-            if (field.type === "password") {
-                field.type = "text";
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
+            const passwordField = document.getElementById(fieldId);
+            const passwordToggle = passwordField.nextElementSibling.firstElementChild;
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                passwordToggle.classList.remove('fa-eye');
+                passwordToggle.classList.add('fa-eye-slash');
             } else {
-                field.type = "password";
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
+                passwordField.type = 'password';
+                passwordToggle.classList.remove('fa-eye-slash');
+                passwordToggle.classList.add('fa-eye');
             }
         }
 
-        document.querySelectorAll('.edit-icon').forEach(function(icon) {
-            icon.addEventListener('click', function() {
-                var input = this.previousElementSibling;
-                input.disabled = !input.disabled;
-                if (!input.disabled) {
-                    input.focus();
+        function openModal() {
+            document.getElementById('profilePicModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('profilePicModal').style.display = 'none';
+        }
+
+        function selectProfilePic(pic) {
+            document.getElementById('profile_pic').src = 'user_pic/' + pic;
+            document.getElementById('selectedProfilePic').value = pic;
+            closeModal();
+        }
+
+        function confirmEdit(fieldId) {
+            // Disable all other input fields
+            document.querySelectorAll('.field-container input').forEach(input => {
+                if (input.id !== fieldId) {
+                    input.disabled = true;
+                    input.classList.add('disabled-field');
                 }
             });
-        });
 
-        document.querySelector('.btn-save').addEventListener('click', function(event) {
-            event.preventDefault();
-            if (confirm('Are you sure you want to save the changes?')) {
-                document.getElementById('profileForm').submit();
-            }
-        });
+            // Enable the selected input field
+            const field = document.getElementById(fieldId);
+            field.classList.remove('disabled-field');
+            field.disabled = false;
+        }
 
-        function togglePasswordFields() {
-            var passwordFields = document.querySelector('.password-fields');
-            passwordFields.style.display = passwordFields.style.display === 'none' ? 'block' : 'none';
+        function removeDisabledFields() {
+            document.querySelectorAll('.field-container input').forEach(input => {
+                if (input.disabled) {
+                    input.removeAttribute('name'); // Remove the name attribute to prevent it from being submitted
+                }
+            });
         }
     </script>
 </body>

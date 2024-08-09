@@ -19,26 +19,33 @@ try {
 }
 
 // Registration logic
+$pics = array_diff(scandir('../user_pic/'), array('.', '..'));
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) {
     try {
         $username = $_POST['username'];
         $phone_number = $_POST['phone_number'];
         $email = $_POST['email'];
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hashing the password
+        
+        // Randomly select a profile picture from the user_pic directory
+        $random_pic = $pics[array_rand($pics)];
 
         // Ensure wallet_amount is set to a default value
         $wallet_amount = 0.00;
 
-        // Insert into database
-        $stmt = $conn->prepare("INSERT INTO `user_info` (`user_id`, `join_date`, `username`, `phone_no`, `email_id`, `pass`, `wallet_amount`) VALUES (NULL, NOW(), :username, :phone_number, :email, :password, :wallet_amount)");
-        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
-        $stmt->bindParam(':phone_number', $phone_number, PDO::PARAM_STR);
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        $stmt->bindParam(':password', $password, PDO::PARAM_STR);
-        $stmt->bindParam(':wallet_amount', $wallet_amount, PDO::PARAM_STR);
-        $stmt->execute();
+      // Insert into database
+      $stmt = $conn->prepare("INSERT INTO `user_info` (`user_id`, `join_date`, `username`, `phone_no`, `email_id`, `pass`, `wallet_amount`, `profile_pic`) VALUES (NULL, NOW(), :username, :phone_number, :email, :password, :wallet_amount, :profile_pic)");
+      $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+      $stmt->bindParam(':phone_number', $phone_number, PDO::PARAM_STR);
+      $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+      $stmt->bindParam(':password', $password, PDO::PARAM_STR);
+      $stmt->bindParam(':wallet_amount', $wallet_amount, PDO::PARAM_STR);
+      $stmt->bindParam(':profile_pic', $random_pic, PDO::PARAM_STR);
+      $stmt->execute();
 
-        if ($stmt->rowCount() > 0) {
+
+         if ($stmt->rowCount() > 0) {
             // Registration successful
             $_SESSION['success_message'] = "Registration successful. You can now login.";
             header("Location: login.php");
