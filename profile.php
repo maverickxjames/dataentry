@@ -275,15 +275,26 @@ if (!$user) {
     <div id="profilePicModal" class="modal">
         <div class="modal-content">
             <h3>Select Profile Picture</h3>
-            <!-- Example profile pictures -->
-            <img src="user_pic/profile1.png" alt="Profile 1" onclick="selectProfilePic('profile1.png')">
-            <img src="user_pic/profile2.png" alt="Profile 2" onclick="selectProfilePic('profile2.png')">
-            <img src="user_pic/profile3.png" alt="Profile 3" onclick="selectProfilePic('profile3.png')">
-            <br>
             <button onclick="closeModal()">Close</button>
         </div>
     </div>
     <script>
+
+        function openModal() {
+            document.getElementById('profilePicModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('profilePicModal').style.display = 'none';
+        }
+
+        function selectProfilePic(pic) {
+            document.getElementById('profile_pic').src = 'user_pic/' + pic;
+            document.getElementById('selectedProfilePic').value = pic;
+            closeModal();
+        }
+
+        
         function togglePasswordFields() {
             const passwordFields = document.querySelector('.password-fields');
             passwordFields.style.display = passwordFields.style.display === 'block' ? 'none' : 'block';
@@ -303,19 +314,7 @@ if (!$user) {
             }
         }
 
-        function openModal() {
-            document.getElementById('profilePicModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('profilePicModal').style.display = 'none';
-        }
-
-        function selectProfilePic(pic) {
-            document.getElementById('profile_pic').src = 'user_pic/' + pic;
-            document.getElementById('selectedProfilePic').value = pic;
-            closeModal();
-        }
+        
 
         function confirmEdit(fieldId) {
             // Disable all other input fields
