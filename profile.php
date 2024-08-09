@@ -272,29 +272,36 @@ if (!$user) {
             </div>
         </div>
     </div>
-    <div id="profilePicModal" class="modal">
+    <!-- Modal for Profile Picture Selection -->
+    <div id="profileModal" class="modal">
         <div class="modal-content">
-            <h3>Select Profile Picture</h3>
-            <button onclick="closeModal()">Close</button>
+            <?php
+            $dir = 'user_pic/';
+            $images = array_diff(scandir($dir), array('..', '.'));
+
+            foreach ($images as $image) {
+                echo "<img src='$dir$image' onclick='selectPhoto(\"$image\")'>";
+            }
+            ?>
         </div>
     </div>
     <script>
 
         function openModal() {
-            document.getElementById('profilePicModal').style.display = 'flex';
+            document.getElementById("profileModal").style.display = "flex";
         }
 
         function closeModal() {
-            document.getElementById('profilePicModal').style.display = 'none';
+            document.getElementById("profileModal").style.display = "none";
         }
 
-        function selectProfilePic(pic) {
-            document.getElementById('profile_pic').src = 'user_pic/' + pic;
-            document.getElementById('selectedProfilePic').value = pic;
+        function selectPhoto(image) {
+            document.getElementById("selectedProfilePic").value = image;
+            document.getElementById("profile_pic").src = "user_pic/" + image;
             closeModal();
         }
 
-        
+
         function togglePasswordFields() {
             const passwordFields = document.querySelector('.password-fields');
             passwordFields.style.display = passwordFields.style.display === 'block' ? 'none' : 'block';
