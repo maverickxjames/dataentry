@@ -8,6 +8,8 @@ $sql = "SELECT sl_no, user_id, join_date, username, phone_no, email_id, pass, wa
 $result = $conn->query($sql);
 ?>
 
+hjhj
+
 <?php 
 session_start();
 ?>
