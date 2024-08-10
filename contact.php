@@ -1,6 +1,25 @@
 <?php
-// Start the session at the very beginning of the file
 session_start();
+
+// Include database connection
+include('db.php');
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login/login.php");
+    exit();
+}
+
+// Get the logged-in user's ID
+$user_id = $_SESSION['user_id'];
+
+$sql = "SELECT * FROM user_info WHERE user_id='$user_id'";
+$user = mysqli_fetch_assoc(mysqli_query($conn, $sql));
+if (!$user) {
+    die("No user found with ID $user_id");
+}
+
+$wallet_amount = $user['wallet_amount'];
 ?>
 
 
@@ -209,6 +228,16 @@ session_start();
             background-color: currentColor;
             animation: underline 0.7s forwards;
         }
+        /* for wallet icon */
+       .navbar .wallet {
+           display: flex;
+           align-items: center;
+           margin-right: 10px;
+       }
+       
+       .wallet-icon {
+           margin-right: 5px;
+       }
     </style>
 </head>
 <!--
@@ -337,10 +366,14 @@ to get the desired effect
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"><i
-            class="fas fa-th-large"></i></a>
-      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link" href="#">
+          <div class="wallet">
+            <i class="fas fa-wallet wallet-icon"></i>
+            <span class="right badge badge-info right">$<?php echo htmlspecialchars(number_format($wallet_amount, 2)); ?></span>
+          </div>
+        </a>
+      </li> 
     </ul>
   </nav>
   <!-- /.navbar -->

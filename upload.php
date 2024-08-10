@@ -327,18 +327,25 @@ to get the desired effect
     <div class="content">
     
       <div class="container-fluid">
-        <div class="row">
-                <div class="col-12">
-                        <div class="card">
-                                <form class="form-group" action="upload.php" method="post" enctype="multipart/form-data">
-                    <label for="file">Select file to upload:</label>
-                    <input class="form-control" type="file" name="file" id="file" required>
-                    <input class="btn btn-success" type="submit" value="Upload File" name="submit">
-            </form>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <form class="form-group" action="upload.php" method="post" enctype="multipart/form-data">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <label for="file">Select file to upload:</label>
+                            <input class="form-control" type="file" name="file" id="file" required>
                         </div>
-                </div>
+                        <div class="col-md-4">
+                            <input class="btn btn-success" type="submit" value="Upload File" name="submit" style="margin-top: 30px;">
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
+    </div>
 </div>
+
 </div>
 
     <!-- Main content -->

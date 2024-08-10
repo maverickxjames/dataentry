@@ -43,15 +43,15 @@ $wallet_amount = $user['wallet_amount'];
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <style>
-.navbar .wallet {
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
-}
-
-.wallet-icon {
-    margin-right: 5px;
-}
+   .navbar .wallet {
+       display: flex;
+       align-items: center;
+       margin-right: 10px;
+   }
+   
+   .wallet-icon {
+       margin-right: 5px;
+   }
 </style>
 
 </head>
