@@ -179,7 +179,7 @@ $wallet_amount = $user['wallet_amount'];
             color: #777;
             margin-left: 10px;
         }
-        .modal {
+        .model1 {
             display: none;
             position: fixed;
             top: 0;
@@ -190,14 +190,14 @@ $wallet_amount = $user['wallet_amount'];
             justify-content: center;
             align-items: center;
         }
-        .modal-content {
+        .model1-content {
             background-color: white;
             padding: 20px;
             border-radius: 10px;
-            width: 300px;
+            width: 400px;
             text-align: center;
         }
-        .modal-content img {
+        .model1-content img {
             width: 80px;
             height: 80px;
             border-radius: 50%;
@@ -399,7 +399,7 @@ $wallet_amount = $user['wallet_amount'];
         </div>
         <div class="profile-info">
             <div class="profile-picture">
-                <img src="user_pic/<?php echo htmlspecialchars($user['profile_pic']); ?>" alt="Profile Picture" id="profile_pic">
+                <img src="user_pic/<?php echo htmlspecialchars($user['profile_pic']); ?>" alt="Profile Picture" id="profile_pic1">
                 <button class="btn-change-photo" onclick="openModal()">Change Photo</button>
             </div>
             <div class="profile-details">
@@ -427,7 +427,7 @@ $wallet_amount = $user['wallet_amount'];
                         <input type="text" id="phone" name="phone" value="<?php echo htmlspecialchars($user['phone_no']); ?>" class="disabled-field">
                         <span class="edit-icon" onclick="confirmEdit('phone')">&#9998;</span>
                     </div>
-                    <input type="hidden" id="selectedProfilePic" name="profile_pic" value="<?php echo htmlspecialchars($user['profile_pic']); ?>">
+                    <input type="hidden" id="selectedProfilePic1" name="profile_pic" value="<?php echo htmlspecialchars($user['profile_pic']); ?>">
                     <button type="button" class="btn-change-password" onclick="togglePasswordFields()">Change Password</button>
                     <div class="password-fields">
                         <label for="current_password">Current Password</label>
@@ -452,79 +452,8 @@ $wallet_amount = $user['wallet_amount'];
         </div>
     </div>
     <!-- Modal for Profile Picture Selection -->
-    <div id="profileModal" class="modal">
-        <div class="modal-content">
-            <?php
-            $dir = 'user_pic/';
-            $images = array_diff(scandir($dir), array('..', '.'));
-
-            foreach ($images as $image) {
-                echo "<img src='$dir$image' onclick='selectPhoto(\"$image\")'>";
-            }
-            ?>
-        </div>
-    </div>
-    <script>
-
-        function openModal() {
-            document.getElementById("profileModal").style.display = "flex";
-        }
-
-        function closeModal() {
-            document.getElementById("profileModal").style.display = "none";
-        }
-
-        function selectPhoto(image) {
-            document.getElementById("selectedProfilePic").value = image;
-            document.getElementById("profile_pic").src = "user_pic/" + image;
-            closeModal();
-        }
-
-
-        function togglePasswordFields() {
-            const passwordFields = document.querySelector('.password-fields');
-            passwordFields.style.display = passwordFields.style.display === 'block' ? 'none' : 'block';
-        }
-
-        function togglePasswordVisibility(fieldId) {
-            const passwordField = document.getElementById(fieldId);
-            const passwordToggle = passwordField.nextElementSibling.firstElementChild;
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                passwordToggle.classList.remove('fa-eye');
-                passwordToggle.classList.add('fa-eye-slash');
-            } else {
-                passwordField.type = 'password';
-                passwordToggle.classList.remove('fa-eye-slash');
-                passwordToggle.classList.add('fa-eye');
-            }
-        }
-
-        
-
-        function confirmEdit(fieldId) {
-            // Disable all other input fields
-            document.querySelectorAll('.field-container input').forEach(input => {
-                if (input.id !== fieldId) {
-                    input.disabled = true;
-                    input.classList.add('disabled-field');
-                }
-            });
-
-            // Enable the selected input field
-            const field = document.getElementById(fieldId);
-            field.classList.remove('disabled-field');
-            field.disabled = false;
-        }
-
-        function removeDisabledFields() {
-            document.querySelectorAll('.field-container input').forEach(input => {
-                if (input.disabled) {
-                    input.removeAttribute('name'); // Remove the name attribute to prevent it from being submitted
-                }
-            });
-        }
-    </script>
+    
+   
         </div>
         <!-- /.card-body -->
         <!-- <div class="card-footer">
@@ -538,7 +467,18 @@ $wallet_amount = $user['wallet_amount'];
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
+  <div id="profileModal1" class="model1">
+        <div class="model1-content">
+            <?php
+            $dir = 'user_pic/';
+            $images = array_diff(scandir($dir), array('..', '.'));
 
+            foreach ($images as $image) {
+                echo "<img src='$dir$image' onclick='selectPhoto(\"$image\")'>";
+            }
+            ?>
+        </div>
+    </div>
   <footer class="main-footer">
     <div class="float-right d-none d-sm-block">
       <b>Version</b> 3.2.0
@@ -553,7 +493,68 @@ $wallet_amount = $user['wallet_amount'];
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
+<script>
 
+function openModal() {
+    document.getElementById("profileModal1").style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("profileModal1").style.display = "none";
+}
+
+function selectPhoto(image) {
+    console.log(image);
+    document.getElementById("selectedProfilePic1").value = image;
+    document.getElementById("profile_pic1").src = "user_pic/" + image;
+    closeModal();
+}
+
+
+function togglePasswordFields() {
+    const passwordFields = document.querySelector('.password-fields');
+    passwordFields.style.display = passwordFields.style.display === 'block' ? 'none' : 'block';
+}
+
+function togglePasswordVisibility(fieldId) {
+    const passwordField = document.getElementById(fieldId);
+    const passwordToggle = passwordField.nextElementSibling.firstElementChild;
+    if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        passwordToggle.classList.remove('fa-eye');
+        passwordToggle.classList.add('fa-eye-slash');
+    } else {
+        passwordField.type = 'password';
+        passwordToggle.classList.remove('fa-eye-slash');
+        passwordToggle.classList.add('fa-eye');
+    }
+}
+
+
+
+function confirmEdit(fieldId) {
+    // Disable all other input fields
+    document.querySelectorAll('.field-container input').forEach(input => {
+        if (input.id !== fieldId) {
+            input.disabled = true;
+            input.classList.add('disabled-field');
+        }
+    });
+
+    // Enable the selected input field
+    const field = document.getElementById(fieldId);
+    field.classList.remove('disabled-field');
+    field.disabled = false;
+}
+
+function removeDisabledFields() {
+    document.querySelectorAll('.field-container input').forEach(input => {
+        if (input.disabled) {
+            input.removeAttribute('name'); // Remove the name attribute to prevent it from being submitted
+        }
+    });
+}
+</script>
 <!-- jQuery -->
 <script src="./plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->

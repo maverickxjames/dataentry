@@ -1,6 +1,8 @@
 <?php
 session_start();
 $pageid=2;
+$user_type = $_SESSION['user_type'];
+$uid = $_SESSION['user_id'];
 
 // Include database connection
 include('db.php');
@@ -265,7 +267,71 @@ to get the desired effect
                   </thead>
                   <tbody>
                     <?php 
-                    $query = "SELECT * FROM active_task ORDER BY id DESC";
+
+if($user_type == 'user'){
+  $query = "SELECT * FROM active_task WHERE user_id = '$uid' ORDER BY id DESC";
+  $run = mysqli_query($conn, $query);
+  while($data = mysqli_fetch_assoc($run)){
+    ?>
+    <tr>
+<td><?=$data['id'] ?></td>
+<td><?=$data['work_id'] ?></td>
+<td><?=$data['created_at'] ?></td>
+<td>
+<?php 
+
+if($data['status'] == 'pending'){
+  ?>
+  <p >Start</p></td>
+  <?php
+}elseif($data['status'] == 'working'){
+  ?>
+  <p >Still Working</p></td>
+  <?php
+}
+elseif($data['status'] == 'submitted'){
+  ?>
+  <p >Work Submitted need to be review</p></td>
+  <?php
+}
+elseif($data['status'] == 'completed'){
+  ?>
+  <p >Work Done Successfully</p></td>
+  <?php
+}
+?>  
+</td>
+<td>
+<input id="taskid" type="hidden" name="task" value="<?=$data['work_id'] ?>">
+<?php 
+if($data['status'] == 'pending'){
+  ?>
+  <button class="btn btn-primary" onclick="start()">Start</button></td>
+  <?php
+}elseif($data['status'] == 'working'){
+  ?>
+  <button class="btn btn-danger" disabled>Working</button></td>
+  <?php
+}
+elseif($data['status'] == 'submitted'){
+  ?>
+  <button onclick="window.location.href='./reports.php?task=<?=$data['work_id'] ?>'" class="btn btn-warning" >Review Task</button></td>
+  <?php
+}
+elseif($data['status'] == 'completed'){
+  ?>
+  <button class="btn btn-success" disabled>Completed</button></td>
+  <?php
+}
+?>  
+</td>
+</tr>
+    <?php
+  }
+}
+
+if($user_type == 'admin'){
+  $query = "SELECT * FROM active_task ORDER BY id DESC";
                     $run = mysqli_query($conn, $query);
                     while($data = mysqli_fetch_assoc($run)){
                       ?>
@@ -275,6 +341,7 @@ to get the desired effect
                   <td><?=$data['created_at'] ?></td>
                   <td>
                   <?php 
+
                   if($data['status'] == 'pending'){
                     ?>
                     <p >Start</p></td>
@@ -323,6 +390,11 @@ to get the desired effect
                   </tr>
                       <?php
                     }
+}
+
+
+
+                    
                     ?>
                   
                   </tbody>
