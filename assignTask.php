@@ -1,5 +1,6 @@
 <?php 
 session_start();
+$pageid=2;
 ?>
 
 <!DOCTYPE html>

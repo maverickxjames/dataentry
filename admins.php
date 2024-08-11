@@ -1,6 +1,7 @@
 <?php
 // Include the database connection file
 include 'db.php'; // Make sure this path is correct
+$pageid=5;
 
 // Fetch user details from the database where status is 'user'
 $sql = "SELECT sl_no, user_id, join_date, username, phone_no, email_id, pass, wallet_amount, status FROM user_info WHERE status = 'admin'";

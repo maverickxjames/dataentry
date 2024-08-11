@@ -25,7 +25,7 @@ $workid = $_GET['task'];
     <title>Your Website</title>
     <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file for styling -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
+   
     <style>
         /* Ensure consistent styling for the table columns */
         table th, table td {
@@ -79,7 +79,7 @@ $workid = $_GET['task'];
                 $result = mysqli_query($conn, $sql);
 
                 echo "<div class='fixed-data'>";
-                echo "<table class='table table-bordered'>";
+                echo "<table id='example1' class='table table-bordered'>";
                 echo "<thead>";
                 echo "<tr>";
                 echo "<th>S.No.</th>"; // Serial Number Header
@@ -129,5 +129,7 @@ $workid = $_GET['task'];
             ?>
         </div>
     </main>
+
+  
 </body>
 </html>

@@ -1,5 +1,6 @@
 <?php
 session_start();
+$pageid=2;
 
 // Include database connection
 include('db.php');
@@ -52,6 +53,26 @@ $wallet_amount = $user['wallet_amount'];
    .wallet-icon {
        margin-right: 5px;
    }
+
+   .dataTables_filter {
+    float: right;
+    text-align: right;
+}
+
+.dataTables_filter label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.dataTables_filter label input {
+    margin-left: 5px;
+}
+
+.dataTables_paginate {
+    float: right;
+    text-align: right;
+}
 </style>
 
 </head>
@@ -238,12 +259,13 @@ to get the desired effect
                     <th>Sr. No</th>
                     <th>Task ID</th>
                     <th>Date</th>
+                    <th>Status</th>
                     <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
                     <?php 
-                    $query = "SELECT * FROM active_task WHERE status = 'pending' AND user_id = '".$_SESSION['user_id']."' ORDER BY id DESC";
+                    $query = "SELECT * FROM active_task where status != 'completed' ORDER BY id DESC";
                     $run = mysqli_query($conn, $query);
                     while($data = mysqli_fetch_assoc($run)){
                       ?>
@@ -252,20 +274,38 @@ to get the desired effect
                   <td><?=$data['work_id'] ?></td>
                   <td><?=$data['created_at'] ?></td>
                   <td>
+                  <?php 
+                  if($data['status'] == 'pending'){
+                    ?>
+                    <p >Start</p></td>
+                    <?php
+                  }elseif($data['status'] == 'working'){
+                    ?>
+                    <p >Still Working</p></td>
+                    <?php
+                  }
+                  elseif($data['status'] == 'submitted'){
+                    ?>
+                    <p >Work Submitted need to be review</p></td>
+                    <?php
+                  }
+                  ?>  
+                  </td>
+                  <td>
                   <input id="taskid" type="hidden" name="task" value="<?=$data['work_id'] ?>">
                   <?php 
                   if($data['status'] == 'pending'){
                     ?>
                     <button class="btn btn-primary" onclick="start()">Start</button></td>
                     <?php
-                  }elseif($data['status'] == 'working' && $data['user_id'] == $_SESSION['user_id']){
+                  }elseif($data['status'] == 'working'){
                     ?>
                     <button class="btn btn-danger" disabled>Working</button></td>
                     <?php
                   }
-                  elseif($data['status'] == 'submitted'  && $data['user_id'] == $_SESSION['user_id']){
+                  elseif($data['status'] == 'submitted'){
                     ?>
-                    <button class="btn btn-success" disabled>Completed</button></td>
+                    <button onclick="window.location.href='./reports.php?task=<?=$data['work_id'] ?>'" class="btn btn-warning" >Review Task</button></td>
                     <?php
                   }
                   ?>  
@@ -365,21 +405,21 @@ function start(){
 }
 
 
-//   $(function () {
-//     $("#example1").DataTable({
-//       "responsive": true, "lengthChange": true, "autoWidth": false,
-//       "buttons": ["copy", "csv", "excel", "pdf", "print"]
-//     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-//     $('#example2').DataTable({
-//       "paging": true,
-//       "lengthChange": false,
-//       "searching": false,
-//       "ordering": true,
-//       "info": true,
-//       "autoWidth": false,
-//       "responsive": true,
-//     });
-//   });
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": true, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
 </script>
 </body>
 </html>

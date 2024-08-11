@@ -97,7 +97,7 @@ $stmt->close();
         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
         <li class="nav-item has-treeview menu-open">
-          <a href="#" class="nav-link active">
+          <a href="./dashboard.php" class="nav-link <?php if($pageid == 1){echo 'active';} ?>">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
               Dashboard
@@ -107,7 +107,7 @@ $stmt->close();
 
         </li>
         <li class="nav-item">
-          <a href="index.php" class="nav-link">
+          <a href="index.php" class="nav-link <?php if($pageid == 2){echo 'active';} ?>">
             <i class="nav-icon fas fa-copy"></i>
             <p>
               Tasks
@@ -132,13 +132,13 @@ $stmt->close();
                 </a>
               </li>
               <li class="nav-item">
-                <a href="tasklist.php" class="nav-link">
+                <a href="taskHistory.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>User Task History</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="tasklist.php" class="nav-link">
+                <a href="ReportHistory.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>User Report History</p>
                 </a>
@@ -146,7 +146,7 @@ $stmt->close();
           </ul>
         </li>
           <li class="nav-item">
-          <a href="upload.php" class="nav-link">
+          <a href="upload.php" class="nav-link <?php if($pageid == 3){echo 'active';} ?>">
             <i class="nav-icon far fa-plus-square"></i>
             <p>
               Upload File
@@ -156,7 +156,7 @@ $stmt->close();
         </li>
 
         <li class="nav-item">
-          <a href="users.php" class="nav-link">
+          <a href="users.php" class="nav-link <?php if($pageid == 4){echo 'active';} ?>">
              <i class="nav-icon fas fa-users"></i>
             <p>
              Users
@@ -166,7 +166,7 @@ $stmt->close();
         </li>
 
         <li class="nav-item">
-            <a href="admins.php" class="nav-link">
+            <a href="admins.php" class="nav-link <?php if($pageid == 5){echo 'active';} ?>">
                 <i class="nav-icon fas fa-user-shield"></i>
                 <p>
                     View Admins
@@ -175,7 +175,7 @@ $stmt->close();
             </a>
         </li>
         <li class="nav-item has-treeview">
-          <a href="#" class="nav-link">
+          <a href="#" class="nav-link <?php if($pageid == 6){echo 'active';} ?>">
             <i class="nav-icon far fa-envelope"></i>
             <p>
               Mailbox
@@ -253,7 +253,7 @@ $stmt->close();
         </li>
       <?php } ?>
          <li class="nav-item">
-           <a href="profile.php" class="nav-link">
+           <a href="profile.php" class="nav-link <?php if($pageid == 7){echo 'active';} ?>">
              <i class="nav-icon fas fa-user"></i>
              <p>
               Profile

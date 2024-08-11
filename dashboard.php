@@ -1,5 +1,6 @@
 <?php
 session_start();
+$pageid=1;
 
 // Include database connection
 include('db.php');
