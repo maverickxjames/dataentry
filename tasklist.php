@@ -300,7 +300,9 @@ to get the desired effect
                     <?php
                   }elseif($data['status'] == 'working'){
                     ?>
-                    <button class="btn btn-danger" disabled>Working</button></td>
+                    <button class="btn btn-danger" disabled>Working</button>
+                    <button onclick="window.location.href='./work.php?task=<?=$data['work_id'] ?>'" class="btn btn-success" ><i class="fa fa-arrow-right"></i></button>
+                  </td>
                     <?php
                   }
                   elseif($data['status'] == 'submitted'){

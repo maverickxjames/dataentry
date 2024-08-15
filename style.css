@@ -84,15 +84,15 @@ table.table tr th {
     text-transform: uppercase;
 }
 
-form p {
+#form p {
     font-weight: 600;
     text-transform: uppercase;
     margin-top: 15px;
-    margin-bottom: 5px
-    
+    margin-bottom: 5px;
+    text-align: left;
 }
 
-form .form-control {
+#form .form-control {
     border-bottom: 1px solid #000 !important;
     border-radius: 2px;
 }
@@ -158,30 +158,3 @@ input[type="file"]{
 
 
 
-/* Basic styles for the menu */
-
-.navbar {
-    background-color: #333;
-    padding: 10px 20px;
-}
-
-.nav-list {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-
-.nav-list li {
-    display: inline;
-    margin-right: 10px;
-}
-
-.nav-list li a {
-    color: white;
-    text-decoration: none;
-    padding: 8px 12px;
-}
-
-.nav-list li a:hover {
-    background-color: #555;
-}

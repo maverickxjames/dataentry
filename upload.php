@@ -380,6 +380,7 @@ to get the desired effect
                         <th>Date</th>
                         <th>PDF ID</th>
                         <th>Status</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -390,10 +391,21 @@ to get the desired effect
                         $sl_no = 1;
                         while ($row = mysqli_fetch_assoc($result)) {
                           $icon = '';
+                          $btn = '';
                           if ($row['file_type'] == 'pdf') {
                             $icon = '<img src="https://cdn-icons-png.flaticon.com/512/3143/3143500.png" width="60" alt="PDF Icon" class="icon">';
+                           
                           } elseif ($row['file_type'] == 'xlsx') {
                             $icon = '<img src="https://cdn-icons-png.flaticon.com/512/15465/15465638.png" width="60" alt="Excel Icon" class="icon">';
+                         
+                          }
+
+                          if($row['update_status'] == 'pending') {
+                            $btn = '<button class="btn btn-warning">Upload</button>';
+                          } elseif($row['update_status'] == 'success') {
+                            $btn = '<button class="btn btn-success">Uploaded</button>';
+                          } elseif($row['update_status'] == 'failed') {
+                            $btn = '<button class="btn btn-danger">Failed</button>';
                           }
                           echo '<tr>
                             <td>' . $sl_no++ . '</td>
@@ -402,6 +414,7 @@ to get the desired effect
                             <td>' . $row['created_at'] . '</td>
                             <td>' . $row['pdf_id'] . '</td>
                             <td>' . $row['update_status'] . '</td>
+                            <td>'.$btn.'</td>
                         </tr>';
                         }
                       } else {
