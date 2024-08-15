@@ -192,11 +192,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
        
         @media (max-width: 576px) {
             .form-container {
-                width: 100%;
-                height: 30%;
+                width: 80%;
+                height: 40%;
                 padding: 10px;
                 box-shadow: none;
-                border-radius: 0;
+                border-radius: 8;
             }
         }
     </style>
