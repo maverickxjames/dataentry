@@ -4,7 +4,6 @@ $username = "root";
 $password = "";
 $dbname = "dataentry";
 
-$var = "JK";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
