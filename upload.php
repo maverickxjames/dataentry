@@ -28,7 +28,7 @@ if (isset($_POST['submit'])) {
           $stmt = $conn->prepare($sql);
           $stmt->bind_param("sssss", $pdf_id, $fileName, $fileActualExt, $fileDestination, $update_status);
           if ($stmt->execute()) {
-            header("Location: upload.php?uploadsuccess=1");
+            header("Location: upload?uploadsuccess=1");
           } else {
             echo "There was an error uploading your file!";
           }
@@ -334,7 +334,7 @@ to get the desired effect
                 
                 <br>
                 
-                  <form action="upload.php" method="post" enctype="multipart/form-data">
+                  <form action="upload" method="post" enctype="multipart/form-data">
                   <div class="form-group container">
                   <!-- <label for="customFile">Custom File</label> -->
                     <div class="custom-file">
@@ -397,7 +397,7 @@ to get the desired effect
                            
                           } elseif ($row['file_type'] == 'xlsx') {
                             $icon = '<img src="https://cdn-icons-png.flaticon.com/512/15465/15465638.png" width="60" alt="Excel Icon" class="icon">';
-                         
+  
                           }
 
                           if($row['update_status'] == 'pending') {

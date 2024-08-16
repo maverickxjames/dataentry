@@ -55,9 +55,9 @@ session_start();
             <?php
             // Check if user is logged in
             if (isset($_SESSION['user_id'])) {
-                echo '<li><a href="login/logout.php">Logout</a></li>';
+                echo '<li><a href="login/logout">Logout</a></li>';
             } else {
-                echo '<li><a href="login/login.php">Login</a></li>';
+                echo '<li><a href="login/login">Login</a></li>';
             }
             ?>
         </ul>

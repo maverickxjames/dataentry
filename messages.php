@@ -5,22 +5,25 @@ $pageid=1;
 // Include database connection
 include('db.php');
 
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login/login");
-    exit();
+// Check if the admin is logged in
+if (!isset($_SESSION['admin_logged_in'])) {
+    header('Location: login');
+    exit;
 }
 
-// Get the logged-in user's ID
-$user_id = $_SESSION['user_id'];
+// Fetch contact message details
+$msg_sql = "SELECT `s.no`, `date`, `username`, `email_id`, `phone_no`, `msg`, `status` FROM contact_msg WHERE user_id='$user_id'";
+$msg_result = mysqli_query($conn, $msg_sql);
 
-$sql = "SELECT * FROM user_info WHERE user_id='$user_id'";
-$user = mysqli_fetch_assoc(mysqli_query($conn, $sql));
-if (!$user) {
-    die("No user found with ID $user_id");
+if (!$msg_result) {
+    die("Error fetching contact message details: " . mysqli_error($conn));
 }
 
-$wallet_amount = $user['wallet_amount'];
+$messages = [];
+while ($msg_row = mysqli_fetch_assoc($msg_result)) {
+    $messages[] = $msg_row;
+}
+
 ?>
 
 
@@ -32,7 +35,7 @@ $wallet_amount = $user['wallet_amount'];
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-  <title>AdminPod | Dashboard </title>
+  <title>AdminPod | messages </title>
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
@@ -351,12 +354,12 @@ to get the desired effect
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Dashboard </h1>
+            <h1 class="m-0 text-dark">messages </h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard </li>
+              <li class="breadcrumb-item active">messages </li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -364,45 +367,56 @@ to get the desired effect
     </div>
     <!-- /.content-header -->
 
-    <!-- Main content -->
-    <div class="content">
-      <div class="container-fluid">
-      <div class="maintenance">
-  <div class="maintenance_contain">
-    <img src="https://demo.wpbeaveraddons.com/wp-content/uploads/2018/02/main-vector.png" alt="maintenance">
-    <span class="pp-infobox-title-prefix">WE ARE COMING SOON</span>
-    <div class="pp-infobox-title-wrapper">
-		  <h3 class="pp-infobox-title">This Page under maintenance!</h3>
-	  </div> 
-  <div class="pp-infobox-description">
-		<p>Someone has kidnapped our site. We are negotiation ransom and<br>will resolve this issue in 6 hours</p>			</div>    
-    <span class="title-text pp-primary-title">We are social</span>
-    <div class="pp-social-icons pp-social-icons-center pp-responsive-center">
-	<span class="pp-social-icon">
-		<link itemprop="url" href="#">
-		<a itemprop="sameAs" href="#" target="_blank" title="Facebook" aria-label="Facebook" role="button">
-			<i class="fa fa-facebook"></i>
-		</a>
-	</span>
-	<span class="pp-social-icon">
-		<link itemprop="url" href="#">
-		<a itemprop="sameAs" href="#" target="_blank" title="Twitter" aria-label="Twitter" role="button">
-			<i class="fa fa-twitter"></i>
-		</a>
-	</span>
-	<span class="pp-social-icon">
-		<link itemprop="url" href="#">
-		<a itemprop="sameAs" href="#" target="_blank" title="Google Plus" aria-label="Google Plus" role="button">
-			<i class="fa fa-google-plus"></i>
-		</a>
-	</span>
-	<span class="pp-social-icon">
-		<a itemprop="sameAs" href="#" target="_blank" title="LinkedIn" aria-label="LinkedIn" role="button">
-			<i class="fa fa-linkedin"></i>
-		</a>
-	</span>
-</div>
-  </div>
+   <!-- Main content -->
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- User Info Section -->
+            <div class="col-lg-6">
+                <h2>User Information</h2>
+                <p><strong>Username:</strong> <?php echo htmlspecialchars($user['username']); ?></p>
+                <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email_id']); ?></p>
+                <p><strong>Phone:</strong> <?php echo htmlspecialchars($user['phone_no']); ?></p>
+                <p><strong>Join Date:</strong> <?php echo htmlspecialchars($user['join_date']); ?></p>
+                <p><strong>Wallet Amount:</strong> $<?php echo htmlspecialchars(number_format($wallet_amount, 2)); ?></p>
+            </div>
+
+            <!-- Contact Messages Section -->
+            <div class="col-lg-6">
+                <h2>Contact Messages</h2>
+                <?php if (empty($messages)): ?>
+                    <p>No contact messages found.</p>
+                <?php else: ?>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Date</th>
+                                <th>Username</th>
+                                <th>Email ID</th>
+                                <th>Phone No</th>
+                                <th>Message</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($messages as $msg): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($msg['s.no']); ?></td>
+                                    <td><?php echo htmlspecialchars($msg['date']); ?></td>
+                                    <td><?php echo htmlspecialchars($msg['username']); ?></td>
+                                    <td><?php echo htmlspecialchars($msg['email_id']); ?></td>
+                                    <td><?php echo htmlspecialchars($msg['phone_no']); ?></td>
+                                    <td><?php echo htmlspecialchars($msg['msg']); ?></td>
+                                    <td><?php echo htmlspecialchars($msg['status']); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
 </div>
         <!-- /.row -->
       </div>

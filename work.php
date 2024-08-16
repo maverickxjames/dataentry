@@ -7,7 +7,7 @@ include('db.php');
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login/login.php");
+    header("Location: login/login");
     exit();
 }
 
@@ -218,7 +218,7 @@ include 'db.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login/login.php");
+    header("Location: login/login");
     exit();
 }
 

@@ -7,7 +7,7 @@ include('db.php');
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login/login.php");
+    header("Location: login/login");
     exit();
 }
 
@@ -382,8 +382,8 @@ $wallet_amount = $user['wallet_amount'];
         <div class="profile-header">
             <h2>My Profile</h2>
             <div class="button-container">
-                <a href="home.php" class="btn-home">Home</a>
-                <a href="login/logout.php" class="btn-logout">Logout</a>
+                <a href="home" class="btn-home">Home</a>
+                <a href="login/logout" class="btn-logout">Logout</a>
             </div>
         </div>
         <div class="profile-info">

@@ -5,7 +5,7 @@ include('db.php');
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login/login.php");
+    header("Location: login/login");
     exit();
 }
 
@@ -21,7 +21,7 @@ $user = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
 if (!$user) {
-    header("Location: login/login.php"); // Redirect if no user found
+    header("Location: login/login"); // Redirect if no user found
     exit();
 }
 
@@ -42,6 +42,31 @@ $stmt->execute();
 $row_admins = $stmt->get_result()->fetch_assoc();
 $total_admins = $row_admins['total_admins'];
 $stmt->close();
+
+
+// Query to get the total number of messages
+$query_total = "SELECT COUNT(*) AS total FROM contact_msg";
+$result_total = mysqli_query($conn, $query_total);
+
+if ($result_total) {
+    $row_total = mysqli_fetch_assoc($result_total);
+    $total_messages = $row_total['total'];
+} else {
+    // Handle query error
+    $total_messages = 0;
+}
+
+// Query to get the number of unread messages
+$query_unread = "SELECT COUNT(*) AS unread FROM contact_msg WHERE status = 'unread'"; // Adjust 'unread' to your actual status value
+$result_unread = mysqli_query($conn, $query_unread);
+
+if ($result_unread) {
+    $row_unread = mysqli_fetch_assoc($result_unread);
+    $unread_messages = $row_unread['unread'];
+} else {
+    // Handle query error
+    $unread_messages = 0;
+}
 ?>
 
 
@@ -86,7 +111,7 @@ $stmt->close();
         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
         <li class="nav-item has-treeview menu-open">
-          <a href="./dashboard.php" class="nav-link <?php if($pageid == 1){echo 'active';} ?>">
+          <a href="./dashboard" class="nav-link <?php if($pageid == 1){echo 'active';} ?>">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
               Dashboard
@@ -96,7 +121,7 @@ $stmt->close();
 
         </li>
         <li class="nav-item">
-          <a href="index.php" class="nav-link <?php if($pageid == 2){echo 'active';} ?>">
+          <a href="index" class="nav-link <?php if($pageid == 2){echo 'active';} ?>">
             <i class="nav-icon fas fa-copy"></i>
             <p>
               Tasks
@@ -109,25 +134,25 @@ $stmt->close();
             if ($user_type == 'admin') {
             ?>
               <li class="nav-item">
-                <a href="assignTask.php" class="nav-link">
+                <a href="assignTask" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Assign Task</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="tasklist.php" class="nav-link">
+                <a href="tasklist" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>pending User Report</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="taskHistory.php" class="nav-link">
+                <a href="taskHistory" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>User Task History</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="ReportHistory.php" class="nav-link">
+                <a href="ReportHistory" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>User Report History</p>
                 </a>
@@ -135,17 +160,17 @@ $stmt->close();
           </ul>
         </li>
           <li class="nav-item">
-          <a href="upload.php" class="nav-link <?php if($pageid == 3){echo 'active';} ?>">
+          <a href="upload." class="nav-link <?php if($pageid == 3){echo 'active';} ?>">
             <i class="nav-icon far fa-plus-square"></i>
             <p>
               Upload File
-              <span class="right badge badge-info right"> + </span>
+              <span class="right badge badge-warning yellow-badge"> + </span>
             </p>
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="users.php" class="nav-link <?php if($pageid == 4){echo 'active';} ?>">
+          <a href="users" class="nav-link <?php if($pageid == 4){echo 'active';} ?>">
              <i class="nav-icon fas fa-users"></i>
             <p>
              Users
@@ -155,7 +180,7 @@ $stmt->close();
         </li>
 
         <li class="nav-item">
-            <a href="admins.php" class="nav-link <?php if($pageid == 5){echo 'active';} ?>">
+            <a href="admins" class="nav-link <?php if($pageid == 5){echo 'active';} ?>">
                 <i class="nav-icon fas fa-user-shield"></i>
                 <p>
                     View Admins
@@ -163,8 +188,22 @@ $stmt->close();
                 </p>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="messages" class="nav-link <?php if($pageid == 6){echo 'active';} ?>">
+                <i class="nav-icon fas fa-envelope"></i>
+                <p>
+                    View Messages
+                    <span class="right badge badge-primary blue-badge" title="Total Messages"> 
+                        <?php echo $total_messages; ?>
+                    </span>
+                    <span class="right badge badge-danger red-badge" title="Unread Messages"> 
+                        <?php echo $unread_messages; ?>
+                    </span>
+                </p>
+            </a>
+        </li>
         <li class="nav-item has-treeview">
-          <a href="#" class="nav-link <?php if($pageid == 6){echo 'active';} ?>">
+          <a href="#" class="nav-link <?php if($pageid == 12){echo 'active';} ?>">
             <i class="nav-icon far fa-envelope"></i>
             <p>
               Mailbox
@@ -196,26 +235,26 @@ $stmt->close();
             } else {
             ?>
               <li class="nav-item">
-                <a href="tasklist.php" class="nav-link">
+                <a href="tasklist" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Start Working</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="ReportHistory.php" class="nav-link">
+                <a href="ReportHistory" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Task History</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="reports.php" class="nav-link">
+                <a href="reports" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Final Reports</p>
                 </a>
               </li>
             </ul>
               <li class="nav-item">
-                 <a href="contact.php" class="nav-link">
+                 <a href="wallet" class="nav-link">
                    <i class="nav-icon fas fa-wallet"></i>
                    <p>
                      wallet 
@@ -223,7 +262,7 @@ $stmt->close();
                  </a>
               </li>
                <li class="nav-item">
-                 <a href="contact.php" class="nav-link">
+                 <a href="contact" class="nav-link">
                    <i class="nav-icon fas fa-envelope"></i>
                    <p>
                      Get Help
@@ -231,7 +270,7 @@ $stmt->close();
                  </a>
                </li>
                <li class="nav-item">
-                 <a href="about_us.php" class="nav-link">
+                 <a href="about_us" class="nav-link">
                    <i class="nav-icon fas fa-file-alt"></i>
                    <p>
                      About Us
@@ -242,7 +281,7 @@ $stmt->close();
         </li>
       <?php } ?>
          <li class="nav-item">
-           <a href="profile.php" class="nav-link <?php if($pageid == 7){echo 'active';} ?>">
+           <a href="profile" class="nav-link <?php if($pageid == 7){echo 'active';} ?>">
              <i class="nav-icon fas fa-user"></i>
              <p>
               Profile
@@ -253,9 +292,9 @@ $stmt->close();
           <?php
           // Check if user is logged in
           if (isset($_SESSION['user_id'])) {
-            echo '<a href="login/logout.php" class="nav-link"><i class="nav-icon fas fa-sign-out-alt"></i><p>Logout</p></a>';
+            echo '<a href="login/logout" class="nav-link"><i class="nav-icon fas fa-sign-out-alt"></i><p>Logout</p></a>';
           } else {
-            echo '<a href="login/login.php" class="nav-link"><i class="nav-icon fas fa-sign-in-alt"></i><p>Login</p></a>';
+            echo '<a href="login/login" class="nav-link"><i class="nav-icon fas fa-sign-in-alt"></i><p>Login</p></a>';
           }
           ?>
         </li>

@@ -3,7 +3,7 @@ session_start();
 include('db.php');
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login/login.php");
+    header("Location: login/login");
     exit();
 }
 
@@ -77,6 +77,6 @@ if (!empty($_POST['current_password']) && !empty($_POST['new_password']) && !emp
 
 // Redirect to profile page with success or error messages
 $_SESSION['errors'] = $errors;
-header("Location: profile.php");
+header("Location: profile");
 exit();
 ?>

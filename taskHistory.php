@@ -7,7 +7,7 @@ include('db.php');
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login/login.php");
+    header("Location: login/login");
     exit();
 }
 
@@ -99,7 +99,7 @@ to get the desired effect
         <a href="index3.html" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="contact.php" class="nav-link">Contact</a>
+        <a href="contact" class="nav-link">Contact</a>
       </li>
     </ul>
 

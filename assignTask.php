@@ -395,7 +395,7 @@ function assignTask(id) {
 
             $.ajax({
                 type: "POST",
-                url: "assignTasks.php",
+                url: "assignTasks",
                 data: formData,
                 dataType: "json",
                 encode: true,
