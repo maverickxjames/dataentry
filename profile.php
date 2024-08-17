@@ -39,8 +39,8 @@ $wallet_amount = $user['wallet_amount'];
         body {
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
-            margin: 5px;
-            padding: 5px;
+            margin: 0;
+            padding: 0;
         }
         .containerr {
             width: 100%;
@@ -195,8 +195,19 @@ $wallet_amount = $user['wallet_amount'];
             padding: 20px;
             border-radius: 10px;
             width: 400px;
+            height: 400px;
             text-align: center;
+            overflow-y: scroll;
         }
+
+@media (max-width: 768px) {
+    .model1-content{
+        width: 330px;
+    }
+}
+
+
+
         .model1-content img {
             width: 80px;
             height: 80px;
@@ -446,5 +457,9 @@ function removeDisabledFields() {
 <script src="./dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="./dist/js/demo.js"></script>
+
+
+
+
 </body>
 </html>
