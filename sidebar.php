@@ -5,7 +5,7 @@ include('db.php');
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login/login");
+    header("Location: login/");
     exit();
 }
 
@@ -21,7 +21,7 @@ $user = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
 if (!$user) {
-    header("Location: login/login"); // Redirect if no user found
+    header("Location: login/"); // Redirect if no user found
     exit();
 }
 
@@ -76,8 +76,8 @@ if ($result_unread) {
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
   <a href="index3.html" class="brand-link">
-    <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-    <span class="brand-text font-weight-light">AdminPod</span>
+    <img src="dist/img/logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <span class="brand-text font-weight-light">RS Data Solution</span>
   </a>
 
   <!-- Sidebar -->
@@ -160,7 +160,7 @@ if ($result_unread) {
           </ul>
         </li>
           <li class="nav-item">
-          <a href="upload." class="nav-link <?php if($pageid == 3){echo 'active';} ?>">
+          <a href="upload" class="nav-link <?php if($pageid == 3){echo 'active';} ?>">
             <i class="nav-icon far fa-plus-square"></i>
             <p>
               Upload File

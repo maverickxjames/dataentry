@@ -6,13 +6,16 @@ $pageid=1;
 include('db.php');
 
 // Check if the admin is logged in
-if (!isset($_SESSION['admin_logged_in'])) {
-    header('Location: login');
-    exit;
+if (!isset($_SESSION['user_id'])) {
+
+  header("Location: login/");
+  exit();
+}else{
+  $user_id = $_SESSION['user_id'];
 }
 
 // Fetch contact message details
-$msg_sql = "SELECT `s.no`, `date`, `username`, `email_id`, `phone_no`, `msg`, `status` FROM contact_msg WHERE user_id='$user_id'";
+$msg_sql = "SELECT `s.no`, `date`, `username`, `email_id`, `phone_no`, `msg`, `status` FROM contact_msg";
 $msg_result = mysqli_query($conn, $msg_sql);
 
 if (!$msg_result) {
@@ -216,133 +219,7 @@ to get the desired effect
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-    <!-- Left navbar links -->
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
-      </li>
-    </ul>
-
-    <!-- SEARCH FORM -->
-    <form class="form-inline ml-3">
-      <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-        <div class="input-group-append">
-          <button class="btn btn-navbar" type="submit">
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
-      </div>
-    </form>
-
-    <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
-      <!-- Messages Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-comments"></i>
-          <span class="badge badge-danger navbar-badge">3</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  Brad Diesel
-                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">Call me whenever you can...</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  John Pierce
-                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">I got your message bro</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  Nora Silvester
-                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">The subject goes here</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-        </div>
-      </li>
-      <!-- Notifications Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge">15</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header">15 Notifications</span>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link" href="#">
-          <div class="wallet">
-            <i class="fas fa-wallet wallet-icon"></i>
-            <span class="right badge badge-info right">$<?php echo htmlspecialchars(number_format($wallet_amount, 2)); ?></span>
-          </div>
-        </a>
-      </li> 
-      <!-- <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"><i
-            class="fas fa-th-large"></i></a>
-      </li> -->
-    </ul>
-  </nav>
+  <?php include_once('navbar.php') ?>
   <!-- /.navbar -->
 
 <?php include('sidebar.php') ?>
@@ -369,54 +246,60 @@ to get the desired effect
 
    <!-- Main content -->
 <div class="content">
-    <div class="container-fluid">
+<div class="container-fluid">
         <div class="row">
-            <!-- User Info Section -->
-            <div class="col-lg-6">
-                <h2>User Information</h2>
-                <p><strong>Username:</strong> <?php echo htmlspecialchars($user['username']); ?></p>
-                <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email_id']); ?></p>
-                <p><strong>Phone:</strong> <?php echo htmlspecialchars($user['phone_no']); ?></p>
-                <p><strong>Join Date:</strong> <?php echo htmlspecialchars($user['join_date']); ?></p>
-                <p><strong>Wallet Amount:</strong> $<?php echo htmlspecialchars(number_format($wallet_amount, 2)); ?></p>
-            </div>
+        <div class="col-12">
+        <div class="card">
+              <!-- <div class="card-header">
+                <h3 class="card-title">DataTable with default features</h3>
+              </div> -->
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>Sr. No</th>
+                    <th>Name</th>
+                    <th>Email ID</th>
+                    <th>Phone No</th>
+                    <th>Message</th>
+                    <!-- <th>Status</th> -->
+                  </tr>
+                  </thead>
+                  <tbody>
+                    <?php 
+                    $query = "SELECT * FROM contact_msg";
+                    $result = mysqli_query($conn, $query);
+                    $i = 1;
+                    while ($row = mysqli_fetch_assoc($result)) {
+                      if($row['status'] == 'unread'){
+                        $row['status'] = '<span class="badge badge-danger">Unread</span>';
+                      }else{
+                        $row['status'] = '<span class="badge badge-success">Read</span>';
+                      }
+                      ?>
+                      <tr>
+                        <td><?php echo $i; ?></td>
+                        <td><?php echo $row['username']; ?></td>
+                        <td><?php echo $row['email_id']; ?></td>
+                        <td><?php echo $row['phone_no']; ?></td>
+                        <td><?php echo $row['msg']; ?></td>
+                      </tr>
+                      <?php
+                      $i++;
+                    }
 
-            <!-- Contact Messages Section -->
-            <div class="col-lg-6">
-                <h2>Contact Messages</h2>
-                <?php if (empty($messages)): ?>
-                    <p>No contact messages found.</p>
-                <?php else: ?>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>S.No</th>
-                                <th>Date</th>
-                                <th>Username</th>
-                                <th>Email ID</th>
-                                <th>Phone No</th>
-                                <th>Message</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($messages as $msg): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($msg['s.no']); ?></td>
-                                    <td><?php echo htmlspecialchars($msg['date']); ?></td>
-                                    <td><?php echo htmlspecialchars($msg['username']); ?></td>
-                                    <td><?php echo htmlspecialchars($msg['email_id']); ?></td>
-                                    <td><?php echo htmlspecialchars($msg['phone_no']); ?></td>
-                                    <td><?php echo htmlspecialchars($msg['msg']); ?></td>
-                                    <td><?php echo htmlspecialchars($msg['status']); ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                <?php endif; ?>
+                    ?>
+                  </tbody>
+                  
+                </table>
+              </div>
+              <!-- /.card-body -->
             </div>
         </div>
-    </div>
+        </div>
+        <!-- /.row -->
+      </div>
 </div>
         <!-- /.row -->
       </div>

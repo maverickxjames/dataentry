@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                 // Login successful
                 $_SESSION['user_id'] = $user['user_id'];
                 $_SESSION['user_type'] = $user['status'];
-                header("Location: ../dashboard.php"); // Redirect to dashboard or home page
+                header("Location: ../dashboard"); // Redirect to dashboard or home page
                 exit();
             } else {
                 $_SESSION['error_message'] = "Incorrect password.";
