@@ -37,6 +37,17 @@ session_start();
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <style>
 
+.card-body {
+  overflow-x: auto; /* Enable horizontal scrolling */
+  width: 100%;      /* Ensure the container takes up the full width */
+}
+
+.table {
+  table-layout: auto; /* Allow the table to resize based on its content */
+  width: 100%;        /* Ensure the table takes up full width */
+}
+
+
 .dataTables_filter {
     float: right;
     text-align: right;
@@ -123,6 +134,8 @@ session_start();
         border-color: #888 transparent transparent transparent;
         border-width: 5px 4px 0 4px;
     }
+
+
 </style>
 
 </head>
@@ -177,48 +190,47 @@ to get the desired effect
                 <h3 class="card-title">DataTable with default features</h3>
               </div> -->
               <!-- /.card-header -->
-              <div class="card-body">
-              <table id="example1" class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>sl_no</th>
-                <th>user_id</th>
-                <th>Date</th>
-                <th>username</th>
-                <th>phone_no</th>
-                <th>email_id</th>
-                <th>wallet_amount</th>
-                <th>status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php 
-            $query = "SELECT * FROM user_info WHERE status = 'user' ORDER BY sl_no DESC";
-            $run = mysqli_query($conn, $query);
-            $id = 1;
-            while($data = mysqli_fetch_assoc($run)){
-                ?>
-                <tr>
-                    <td><?=$id ?></td>
-                    <td><?=$data['user_id'] ?></td>
-                    <td><?=$data['join_date'] ?></td>
-                    <td><?=$data['username'] ?></td>
-                    <td><?=$data['phone_no'] ?></td>
-                    <td><?=$data['email_id'] ?></td>
-                    <td><?=$data['wallet_amount'] ?></td>
-                    <td><?=$data['status'] ?></td>
-                    
-                </tr>
-                <?php
-                $id++;
-            }
-            ?>
-        </tbody>
-    </table>
+            <div class="card-body">
+             <div class="table-responsive">
+               <table id="example1" class="table table-bordered table-striped">
+                 <thead>
+                   <tr>
+                     <th>sl_no</th>
+                     <th>user_id</th>
+                     <th>Date</th>
+                     <th>username</th>
+                     <th>phone_no</th>
+                     <th>email_id</th>
+                     <th>wallet_amount</th>
+                     <th>status</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                   <?php 
+                   $query = "SELECT * FROM user_info WHERE status = 'user' ORDER BY sl_no DESC";
+                   $run = mysqli_query($conn, $query);
+                   $id = 1;
+                   while($data = mysqli_fetch_assoc($run)){
+                   ?>
+                   <tr>
+                     <td><?=$id ?></td>
+                     <td><?=$data['user_id'] ?></td>
+                     <td><?=$data['join_date'] ?></td>
+                     <td><?=$data['username'] ?></td>
+                     <td><?=$data['phone_no'] ?></td>
+                     <td><?=$data['email_id'] ?></td>
+                     <td><?=$data['wallet_amount'] ?></td>
+                     <td><?=$data['status'] ?></td>
+                   </tr>
+                   <?php
+                   $id++;
+                   }
+                   ?>
+                 </tbody>
+               </table>
+             </div>
+           </div>
 
-              </div>
-              <!-- /.card-body -->
-            </div>
         </div>
         </div>
         <!-- /.row -->
@@ -286,7 +298,7 @@ to get the desired effect
 <script>
   $(function () {
     $("#example1").DataTable({
-      "responsive": false, "lengthChange": true, "autoWidth": false,
+      "responsive": false, "scrollX": true, "lengthChange": true, "autoWidth": true,
       "buttons": ["copy", "csv", "excel", "pdf", "print"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     $('#example2').DataTable({
@@ -299,28 +311,6 @@ to get the desired effect
       "responsive": false,
     });
   });
-</script>
-
-<script>
-
-
-
-
-//   $(function () {
-//     $("#example1").DataTable({
-//       "responsive": false, "lengthChange": true, "autoWidth": false,
-//       "buttons": ["copy", "csv", "excel", "pdf", "print"]
-//     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-//     $('#example2').DataTable({
-//       "paging": true,
-//       "lengthChange": false,
-//       "searching": false,
-//       "ordering": true,
-//       "info": true,
-//       "autoWidth": false,
-//       "responsive": false,
-//     });
-//   });
 </script>
 </body>
 </html>

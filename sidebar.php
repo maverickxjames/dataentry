@@ -202,8 +202,8 @@ if ($result_unread) {
                 </p>
             </a>
         </li>
-        <li class="nav-item has-treeview">
-          <a href="#" class="nav-link <?php if($pageid == 12){echo 'active';} ?>">
+        <!-- <li class="nav-item has-treeview">
+          <a href="#" class="nav-link ">
             <i class="nav-icon far fa-envelope"></i>
             <p>
               Mailbox
@@ -230,7 +230,7 @@ if ($result_unread) {
               </a>
             </li>
           </ul>
-        </li>
+        </li> -->
             <?php
             } else {
             ?>

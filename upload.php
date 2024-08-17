@@ -381,8 +381,9 @@ fileInput.addEventListener('change', function() {
     $(function() {
       $("#example1").DataTable({
         "responsive": false,
+        "scrollX": true, 
         "lengthChange": true,
-        "autoWidth": false,
+        "autoWidth": true,
         "buttons": ["copy", "csv", "excel", "pdf", "print"]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
       $('#example2').DataTable({
@@ -397,23 +398,6 @@ fileInput.addEventListener('change', function() {
     });
   </script>
 
-  <script>
-    //   $(function () {
-    //     $("#example1").DataTable({
-    //       "responsive": false, "lengthChange": true, "autoWidth": false,
-    //       "buttons": ["copy", "csv", "excel", "pdf", "print"]
-    //     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    //     $('#example2').DataTable({
-    //       "paging": true,
-    //       "lengthChange": false,
-    //       "searching": false,
-    //       "ordering": true,
-    //       "info": true,
-    //       "autoWidth": false,
-    //       "responsive": false,
-    //     });
-    //   });
-  </script>
 </body>
 
 </html>
