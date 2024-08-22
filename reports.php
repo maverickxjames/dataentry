@@ -1,10 +1,9 @@
 <?php
-include('header.php');
+session_start();
+$pageid=1;
 
-// Start session if not already started
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+// Include database connection
+include('db.php');
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -15,43 +14,98 @@ if (!isset($_SESSION['user_id'])) {
 // Get the logged-in user's ID
 $user_id = $_SESSION['user_id'];
 $workid = $_GET['task'];
-?>
 
+$sql = "SELECT * FROM user_info WHERE user_id='$user_id'";
+$user = mysqli_fetch_assoc(mysqli_query($conn, $sql));
+if (!$user) {
+    die("No user found with ID $user_id");
+}
+
+$wallet_amount = $user['wallet_amount'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Website</title>
-    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file for styling -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-   
-    <style>
-        /* Ensure consistent styling for the table columns */
-        table th, table td {
-            text-align: center;
-            vertical-align: middle;
-            padding: 8px; /* Add some padding for better spacing */
-        }
-        table th:first-child, table td:first-child {
-            width: 80px; /* Adjust width if needed */
-            background-color: #f0f0f0; /* Greyish background color for S.No. column */
-        }
-        table th {
-            background-color: #f8f9fa; /* Light background color for headers */
-        }
-        table tbody tr:nth-child(even) {
-            background-color: #f9f9f9; /* Alternate row background color */
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Blank Page</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="./plugins/fontawesome-free/css/all.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="./dist/css/adminlte.min.css">
+  <style>
+        .dataTables_filter {
+      float: right;
+      text-align: right;
+    }
+
+    .dataTables_filter label {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .dataTables_filter label input {
+      margin-left: 5px;
+    }
+
+    .dataTables_paginate {
+      float: right;
+      text-align: right;
+    }
+
+    table th {
+      background-color: #34495e;
+      color: white;
+    }
+
+    .btn-group, .btn-group-vertical{
+        margin: 0 0 10px 0;
+    }
+  </style>
 </head>
-<body>
-   
-    <main>
-        <div class="container">
-            <h1>Raw Data | Today</h1>
+<body class="hold-transition sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+  <!-- Navbar -->
+  <?php include_once('navbar.php') ?>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <?php include('./sidebar.php') ?>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Blank Page</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Blank Page</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+        
+        <div class="card-body">
+        <main>
+        <div >
             <?php
-            include 'db.php';
+           
 
             // Fetch data from the active_task table
             $sql = "SELECT user_id, created_at, work_id, pdf_id, status FROM active_task WHERE user_id = '$user_id' AND work_id = '$workid'";
@@ -68,18 +122,15 @@ $workid = $_GET['task'];
 
             foreach ($tasks as $task) {
                 echo "<div>";
-                echo "<p>User ID: " . htmlspecialchars($task['user_id']) . "</p>";
-                echo "<p>Date: " . htmlspecialchars($task['created_at']) . "</p>";
                 echo "<p>Work ID: " . htmlspecialchars($task['work_id']) . "</p>";
-                echo "<p>PDF ID: " . htmlspecialchars($task['pdf_id']) . "</p>";
                 echo "</div>";
 
                 // Fetch data from the data_entry table based on work_id
                 $sql = "SELECT * FROM data_entry WHERE work_id = '$workid' AND user_id = '$user_id'";
                 $result = mysqli_query($conn, $sql);
 
-                echo "<div class='fixed-data'>";
-                echo "<table id='example1' class='table table-bordered'>";
+                echo "<div>";
+                echo "<table id='example1' class='table table-bordered table-striped'>";
                 echo "<thead>";
                 echo "<tr>";
                 echo "<th>S.No.</th>"; // Serial Number Header
@@ -107,7 +158,7 @@ $workid = $_GET['task'];
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
-                        echo "<td style='background-color: #f0f0f0;'>" . $serial_number . "</td>"; // Greyish background for serial number
+                        echo "<td style='background-color: #34495e;color: white;'>" . $serial_number . "</td>"; // Greyish background for serial number
                         for ($i = 1; $i <= 15; $i++) {
                             echo "<td>" . htmlspecialchars($row['col_' . $i]) . "</td>";
                         }
@@ -129,7 +180,71 @@ $workid = $_GET['task'];
             ?>
         </div>
     </main>
+        </div>
+        <!-- /.card-body -->
+       
+      </div>
+      <!-- /.card -->
 
-  
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <footer class="main-footer">
+    <div class="float-right d-none d-sm-block">
+      <b>Version</b> 3.2.0
+    </div>
+    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+  </footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script src="./plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="./dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="./dist/js/demo.js"></script>
+
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="plugins/jszip/jszip.min.js"></script>
+<script src="plugins/pdfmake/pdfmake.min.js"></script>
+<script src="plugins/pdfmake/vfs_fonts.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script>
+   $(function() {
+  $("#example1").DataTable({
+    "responsive": false,
+    "lengthChange": true,
+    "autoWidth": false,
+    "buttons": ["copy", "csv", "excel", "pdf", "print"]
+  }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+  $('#example2').DataTable({
+    "paging": true,
+    "lengthChange": false,
+    "searching": false,
+    "ordering": true,
+    "info": true,
+    "autoWidth": false,
+    "responsive": false,
+  });
+});
+</script>
 </body>
 </html>

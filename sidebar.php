@@ -247,7 +247,7 @@ if ($result_unread) {
                 </a>
               </li>
               <li class="nav-item">
-                <a href="reports" class="nav-link">
+                <a href="FinalReport" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Final Reports</p>
                 </a>
