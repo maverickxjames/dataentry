@@ -16,17 +16,20 @@ $user_id = $_SESSION['user_id'];
 
 $sql = "SELECT * FROM user_info WHERE user_id='$user_id'";
 $user = mysqli_fetch_assoc(mysqli_query($conn, $sql));
+$count = 0;
 if (!$user) {
     die("No user found with ID $user_id");
 }
 
 $wallet_amount = $user['wallet_amount'];
+$lastRecord = 0;
+$nextRecord = 0;
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
   <title>AdminLTE 3 | Blank Page</title>
 
   <!-- Google Font: Source Sans Pro -->
@@ -178,6 +181,8 @@ if (isset($_POST['FINAL_SUBMIT'])) {
         if (isset($_GET['task'])) {
             $task_id = $_GET['task'];
             $getWork = "SELECT * FROM active_task WHERE work_id = '$task_id' AND user_id = '$user_id' ";
+            $getWork2 = "SELECT * FROM data_entry WHERE work_id = '$task_id' AND user_id = '$user_id' ";
+            $count = mysqli_num_rows(mysqli_query($conn, $getWork2));
             $runWork = mysqli_fetch_assoc(mysqli_query($conn, $getWork));
 
             if ($runWork == '') {
@@ -195,7 +200,13 @@ if (isset($_POST['FINAL_SUBMIT'])) {
     <div class="fixed-data">
         <table>
             <?php
+            $rowid = 1;
             foreach ($fixed_data as $row) {
+                if($rowid == $count){
+                    $lastRecord = $row['col15'];
+                }elseif($rowid == $count+1){
+                    $nextRecord = $row['col1'];
+                }
             ?>
                 <tr>
                     <td><span><?= $row['col1'] ?></span></td>
@@ -215,6 +226,7 @@ if (isset($_POST['FINAL_SUBMIT'])) {
                     <td><span><?= $row['col15'] ?></span></td>
                 </tr>
             <?php
+            $rowid++;
             }
             ?>
 
@@ -328,7 +340,7 @@ if (isset($_POST['FINAL_SUBMIT'])) {
             <br>
             <div class="card p-2">
                 <center>
-                    <input type="submit" name="lastEntry" value="View Last Entry" class="btn btn-danger">
+                    <input type="button" onclick="last_entry()" name="lastEntry" value="View Last Entry" class="btn btn-danger">
                     <input type="reset" id="reset" value="" style="display: none;">
                     <input type="button" value="CLEAR DATA" class="btn btn-secondary" onclick="clearForm()">
                     <input type="submit" name="SAVE_DRAFT" id="save" value="" style="display: none;">
@@ -419,6 +431,17 @@ if (isset($_POST['FINAL_SUBMIT'])) {
                 if (result.isConfirmed) {
                     document.getElementById("final_submit").click();
                 }
+            });
+        }
+        function last_entry(){
+            swal.fire({
+                title: 'Next Entry',
+                text: "<?=$nextRecord ?>",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Previous Entry : <?=$lastRecord ?>'
             });
         }
 

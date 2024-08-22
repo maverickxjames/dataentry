@@ -7,6 +7,7 @@ if (!$user) {
 }
 
 $wallet_amount = $user['wallet_amount'];
+$user_type = $_SESSION['user_type'];
 ?>
 
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -45,14 +46,25 @@ $wallet_amount = $user['wallet_amount'];
 
 
         <!-- Messages Dropdown Menu -->
-      <li class="nav-item dropdown">
+        <?php 
+              if($user_type == 'admin') {
+                
+              } else {
+                ?>
+                <li class="nav-item dropdown">
         <a class="nav-link" href="#">
           <div class="wallet" style="width: 100px;">
             <i class="fas fa-wallet wallet-icon"></i>
-            <span class="right badge badge-info right">$<?php echo htmlspecialchars(number_format($wallet_amount, 2)); ?></span>
+            <span class="right badge badge-info right">₹ <?php echo htmlspecialchars(number_format($wallet_amount, 2)); ?>
+              </span>
           </div>
         </a>
       </li> 
+                <?php
+              }
+              ?>
+
+      
       <!-- <li class="nav-item">
         <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"><i
             class="fas fa-th-large"></i></a>
