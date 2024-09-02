@@ -4,7 +4,7 @@ require 'vendor/autoload.php'; // Ensure this file exists and is correctly inclu
 use Smalot\PdfParser\Parser; // Ensure this matches the installed package
 
 include '../db.php';
-
+// file_put_contents('log.txt', 'Script executed at ' . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
 // Function to check if the file is already processed or pending
 function isFilePending($conn, $fileName) {
     $sql = "SELECT COUNT(*) as count FROM files WHERE file_name = ? AND update_status IN ('pending', 'success', 'failed')";

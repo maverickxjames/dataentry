@@ -76,6 +76,8 @@ if (isset($_POST['submit'])) {
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     .dataTables_filter {
       float: right;
@@ -242,6 +244,20 @@ to get the desired effect
 
       </div>
 
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-body">
+                <button id="startScriptpdf" class="btn btn-warning">Upload All PDF </button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button id="startScriptexcel" class="btn btn-success">Upload All Excel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Main content -->
       <div class="content">
 
@@ -254,8 +270,10 @@ to get the desired effect
               </div> -->
                 <!-- /.card-header -->
                 <div class="card-body">
+                  
                   <table id="example1" class="table table-bordered table-striped">
                     <thead>
+                     
                       <tr>
                         <th>Sl. No</th>
                         <th>File Type</th>
@@ -397,6 +415,93 @@ fileInput.addEventListener('change', function() {
       });
     });
   </script>
+
+<script>
+
+$(document).ready(function() {
+  $(document).ready(function() {
+            $('#startScriptpdf').click(function() {
+                // Show SweetAlert loading animation
+                Swal.fire({
+                    title: 'Please wait...',
+                    text: 'The script is running',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading(); // Start the loading animation
+
+                        // Make the AJAX call after SweetAlert is shown
+                        $.ajax({
+                            url: 'PdfConvertSql/index.php',
+                            method: 'GET',
+                            success: function(response) {
+                                // Hide loading animation and show success message
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'The script has been executed successfully.',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                // Hide loading animation and show error message
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'There was an error executing the script.',
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('#startScriptexcel').click(function() {
+                // Show SweetAlert loading animation
+                Swal.fire({
+                    title: 'Please wait...',
+                    text: 'The script is running',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading(); // Start the loading animation
+
+                        // Make the AJAX call after SweetAlert is shown
+                        $.ajax({
+                            url: 'Excelconvertsql/index.php',
+                            method: 'GET',
+                            success: function(response) {
+                                // Hide loading animation and show success message
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'The script has been executed successfully.',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                // Hide loading animation and show error message
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'There was an error executing the script.',
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
+
+        });
+
+      
+    </script>
 
 </body>
 
