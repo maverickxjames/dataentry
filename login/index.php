@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) {
          if ($stmt->rowCount() > 0) {
             // Registration successful
             $_SESSION['success_message'] = "Registration successful. You can now login.";
-            header("Location: login.php");
+            header("Location: index.php");
             exit();
         } else {
             $_SESSION['error_message'] = "Registration failed. Please try again.";
