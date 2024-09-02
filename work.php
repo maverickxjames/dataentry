@@ -262,7 +262,7 @@ if (isset($_POST['FINAL_SUBMIT'])) {
                                     <form id="form" action="" method="post" class="p-3 ">
                                         <div class="card">
                                             <center>
-                                                <h3 style="font-weight:bold;text-transform:uppercase;color:blue">Enter data</h3>
+                                                <h3 style="font-weight:bold;text-transform:uppercase;color:blue">FORM FILL-UP</h3>
                                             </center>
                                         </div>
                                         <div class="card">
