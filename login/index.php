@@ -257,6 +257,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                 <button type="submit" class="btn btn-success" name="login">Login</button>
             </form>
 
+            <!-- Success/Error Messages -->
+            <?php if(isset($_SESSION['success_message'])): ?>
+                <div class="success-message">
+                    <?php echo $_SESSION['success_message']; ?>
+                </div>
+                <?php unset($_SESSION['success_message']); ?>
+            <?php endif; ?>
             <!-- Error Messages -->
             <?php if(isset($_SESSION['error_message'])): ?>
                 <div class="error-message">
@@ -300,13 +307,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                 <button type="submit" class="btn btn-primary" name="register">Register</button>
             </form>
 
-            <!-- Success/Error Messages -->
-            <?php if(isset($_SESSION['success_message'])): ?>
-                <div class="success-message">
-                    <?php echo $_SESSION['success_message']; ?>
-                </div>
-                <?php unset($_SESSION['success_message']); ?>
-            <?php endif; ?>
+            
 
             <!-- Login Link -->
             <div class="register-link">
