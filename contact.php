@@ -1,5 +1,6 @@
 <?php
 session_start();
+$pageid = 11;
 
 // Include database connection
 include('db.php');
@@ -365,11 +366,11 @@ if (isset($status)) {
                 </div>
                 <div class="info">
                     <h4>Call Support</h4>
-                    <p><a href="tel:+18001236879">+1 800 1236879</a></p>
+                    <p><a href="tel:+918239954479">+91 8239954479</a></p>
                 </div>
                 <div class="info">
                     <h4>Whatsapp Support</h4>
-                    <p><a href="https://wa.me/18001236879?text=Hello%2C%20I%20would%20like%20to%20know%20more%20about%20your%20services." class="whatsapp-link">+1 800 1236879</a></p>
+                    <p><a href="https://wa.me/918239954479?text=Hello%2C%20I%20would%20like%20to%20know%20more%20about%20your%20services." class="whatsapp-link">+91 8239954479</a></p>
                 </div>
                 <div class="info">
                     <h4>Email Support</h4>
@@ -377,7 +378,7 @@ if (isset($status)) {
                 </div>
                 <div class="info">
                     <h4>Address</h4>
-                    <p>Mada Center 8th floor, 379 Hudson St, New York, NY 10018 US</p>
+                    <p>Riddhi Siddhi Data Solutions*1-CH-15, Opposit Brijwasi Misthan Bhandar, Dadabari, Kota, Rajasthan-324009</p>
                 </div>
             </div>
         </div>

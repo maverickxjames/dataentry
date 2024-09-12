@@ -139,12 +139,13 @@ to get the desired effect
                   </thead>
                   <tbody>
                     <?php 
-                    $query = "SELECT * FROM active_task where status != 'completed' ORDER BY id DESC";
+                    $query = "SELECT * FROM active_task where status != 'completed' AND user_id = '$user_id' ORDER BY id DESC";
                     $run = mysqli_query($conn, $query);
+                    $sl_no = 1; // Initialize serial number
                     while($data = mysqli_fetch_assoc($run)){
                       ?>
                       <tr>
-                  <td><?=$data['id'] ?></td>
+                  <td><?= $sl_no++ ?></td> 
                   <td><?=$data['work_id'] ?></td>
                   <td><?=$data['created_at'] ?></td>
                   <td>

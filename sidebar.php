@@ -170,6 +170,16 @@ if ($result_unread) {
         </li>
 
         <li class="nav-item">
+          <a href="ManageFunds" class="nav-link <?php if($pageid == 9){echo 'active';} ?>">
+            <i class="nav-icon far fa-plus-square"></i>
+            <p>
+               Manage Funds
+              <span class="right badge badge-danger red-badge"> + </span>
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item">
           <a href="users" class="nav-link <?php if($pageid == 4){echo 'active';} ?>">
              <i class="nav-icon fas fa-users"></i>
             <p>
@@ -262,7 +272,7 @@ if ($result_unread) {
                  </a>
               </li>
                <li class="nav-item">
-                 <a href="contact" class="nav-link">
+                 <a href="contact" class="nav-link <?php if($pageid == 11){echo 'active';} ?>">
                    <i class="nav-icon fas fa-envelope"></i>
                    <p>
                      Get Help

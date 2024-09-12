@@ -49,6 +49,34 @@ function processXlsx($filePath) {
     return $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
 }
 
+// Function to generate a unique work ID
+function generateUniqueWorkId($conn) {
+    do {
+        $work_id = 'w' . rand(10000, 999999); // Generate a work_id starting with 'w' followed by 5-6 digits
+        $sql = "SELECT COUNT(*) as count FROM active_task WHERE work_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('s', $work_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+    } while ($row['count'] > 0); // Repeat until a unique work_id is found
+
+    return $work_id;
+}
+
+// Function to insert data into active_task table
+function insertIntoActiveTask($conn, $pdf_id) {
+    $work_id = generateUniqueWorkId($conn);
+    $created_at = date('Y-m-d H:i:s');
+    $status = 'pending';
+
+    $sql = "INSERT INTO active_task (work_id, pdf_id, created_at, updated_at, status) VALUES (?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('sssss', $work_id, $pdf_id, $created_at, $created_at, $status);
+    $stmt->execute();
+    $stmt->close();
+}
+
 // Main script logic
 $directory = '../uploads/';
 $files = array_diff(scandir($directory, SCANDIR_SORT_DESCENDING), array('..', '.'));
@@ -93,13 +121,13 @@ foreach ($files as $file) {
             $stmt->bind_param('ssssssssssssssss', ...$params);
 
             if (!$stmt->execute()) {
-                echo "Error: " . $stmt->error . "<br>";
                 $success = false; // Update success variable if there is an error
             }
         }
 
         if ($success) {
             markFileAsProcessed($conn, $file, 'success');
+            insertIntoActiveTask($conn, $pdf_id); // Ensure the function is called here
         } else {
             markFileAsProcessed($conn, $file, 'failed');
         }

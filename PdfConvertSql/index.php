@@ -4,7 +4,7 @@ require 'vendor/autoload.php'; // Ensure this file exists and is correctly inclu
 use Smalot\PdfParser\Parser; // Ensure this matches the installed package
 
 include '../db.php';
-// file_put_contents('log.txt', 'Script executed at ' . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
+
 // Function to check if the file is already processed or pending
 function isFilePending($conn, $fileName) {
     $sql = "SELECT COUNT(*) as count FROM files WHERE file_name = ? AND update_status IN ('pending', 'success', 'failed')";
@@ -39,6 +39,34 @@ function generateUniquePdfId($conn) {
         $nextId = str_pad($maxId + 1, 4, '0', STR_PAD_LEFT);
         return $nextId;
     }
+}
+
+// Function to generate a unique work ID
+function generateUniqueWorkId($conn) {
+    do {
+        $work_id = 'w' . rand(10000, 999999); // Generate a work_id starting with 'w' followed by 5-6 digits
+        $sql = "SELECT COUNT(*) as count FROM active_task WHERE work_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('s', $work_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+    } while ($row['count'] > 0); // Repeat until a unique work_id is found
+
+    return $work_id;
+}
+
+// Function to insert data into active_task table
+function insertIntoActiveTask($conn, $pdf_id) {
+    $work_id = generateUniqueWorkId($conn);
+    $created_at = date('Y-m-d H:i:s');
+    $status = 'pending';
+
+    $sql = "INSERT INTO active_task (work_id, pdf_id, created_at, updated_at, status) VALUES (?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('sssss', $work_id, $pdf_id, $created_at, $created_at, $status);
+    $stmt->execute();
+    $stmt->close();
 }
 
 // Function to process PDF files
@@ -83,7 +111,6 @@ function insertData($conn, $data, $pdf_id) {
 
         // Execute the statement
         if ($stmt->execute() === false) {
-            echo "Error: " . $stmt->error . "<br>";
             $success = false; // Update success variable if there is an error
         }
     }
@@ -119,6 +146,7 @@ foreach ($files as $file) {
 
         if (insertData($conn, $data, $pdf_id)) {
             markFileAsProcessed($conn, $file, 'success');
+            insertIntoActiveTask($conn, $pdf_id);
         } else {
             markFileAsProcessed($conn, $file, 'failed');
         }
