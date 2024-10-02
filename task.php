@@ -24,7 +24,7 @@ $user_id = $_SESSION['user_id'];
     <title>Your Website</title>
     <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file for styling -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
+    
     <style>
         /* Ensure consistent styling for the table columns */
         table th, table td {
@@ -79,8 +79,9 @@ $user_id = $_SESSION['user_id'];
                 $stmt->bind_param("ii", $task['work_id'], $user_id);
                 $stmt->execute();
                 $result = $stmt->get_result();
+                
 
-                echo "<div class='fixed-data'>";
+                echo "<div class='table-responsive'>";
                 echo "<table class='table table-bordered'>";
                 echo "<thead>";
                 echo "<tr>";

@@ -139,7 +139,8 @@ to get the desired effect
                   </thead>
                   <tbody>
                     <?php 
-                    $query = "SELECT * FROM active_task where status != 'completed' AND user_id = '$user_id' ORDER BY id DESC";
+                    $query = "SELECT * FROM active_task WHERE status != 'completed' AND status != 'submitted' AND user_id = '$user_id' ORDER BY id DESC";
+
                     $run = mysqli_query($conn, $query);
                     $sl_no = 1; // Initialize serial number
                     while($data = mysqli_fetch_assoc($run)){
@@ -159,12 +160,9 @@ to get the desired effect
                     <p >Still Working</p></td>
                     <?php
                   }
-                  elseif($data['status'] == 'submitted'){
+                 
                     ?>
-                    <p >Work Submitted need to be review</p></td>
-                    <?php
-                  }
-                  ?>  
+                   
                   </td>
                   <td>
                   <input id="taskid" type="hidden" name="task" value="<?=$data['work_id'] ?>">
@@ -175,15 +173,9 @@ to get the desired effect
                     <?php
                   }elseif($data['status'] == 'working'){
                     ?>
-                    <button class="btn btn-danger" disabled>Working</button>
-                    <button onclick="window.location.href='./work?task=<?=$data['work_id'] ?>'" class="btn btn-success" ><i class="fa fa-arrow-right"></i></button>
+                    <button class="btn btn-danger" onclick="window.location.href='./work?task=<?=$data['work_id'] ?>'">Working 𓂃🖊</button>
                   </td>
-                    <?php
-                  }
-                  elseif($data['status'] == 'submitted'){
-                    ?>
-                    <button onclick="window.location.href='./reports?task=<?=$data['work_id'] ?>'" class="btn btn-warning" >Review Task</button></td>
-                    <?php
+                  <?php
                   }
                   ?>  
                   </td>
@@ -282,15 +274,11 @@ function start(){
 }
 
 
-  $(function () {
+$(function () {
     $("#example1").DataTable({
-      "responsive": true, "lengthChange": true, "autoWidth": false,"ordering": true,
+      "responsive": false, "scrollX": true, "lengthChange": true, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-
-
-    
     $('#example2').DataTable({
       "paging": true,
       "lengthChange": false,
@@ -298,7 +286,7 @@ function start(){
       "ordering": true,
       "info": true,
       "autoWidth": false,
-      "responsive": true,
+      "responsive": false,
     });
   });
 </script>

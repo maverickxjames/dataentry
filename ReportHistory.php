@@ -188,7 +188,7 @@ to get the desired effect
                         <?php
                             } elseif ($data['status'] == 'working') {
                         ?>
-                          <button class="btn btn-danger" disabled>Working</button></td>
+                          <button class="btn btn-danger" onclick="window.location.href='./work?task=<?=$data['work_id'] ?>'">Working 𓂃🖊</button>
                         <?php
                             } elseif ($data['status'] == 'submitted') {
                         ?>
@@ -251,7 +251,7 @@ to get the desired effect
                         <?php
                             } elseif ($data['status'] == 'working') {
                         ?>
-                          <button class="btn btn-danger" disabled>Working</button></td>
+                           <button class="btn btn-danger" onclick="window.location.href='./work?task=<?=$data['work_id'] ?>'">Working 𓂃🖊</button>
                         <?php
                             } elseif ($data['status'] == 'submitted') {
                         ?>
@@ -363,23 +363,21 @@ to get the desired effect
     // }
 
 
-    $(function() {
-      $("#example1").DataTable({
-        "responsive": false,
-        "lengthChange": true,
-        "autoWidth": false,
-        "buttons": ["copy", "csv", "excel", "pdf", "print"]
-      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-      $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": false,
-      });
+    $(function () {
+    $("#example1").DataTable({
+      "responsive": false, "scrollX": true, "lengthChange": true, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": false,
     });
+  });
   </script>
 </body>
 

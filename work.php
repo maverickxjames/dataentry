@@ -50,6 +50,44 @@ $nextRecord = 0;
     user-select: none;
 }
 
+.zoomable-content{
+        width: auto;
+    height: auto;
+    border: 1px solid #333;
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+    transform-origin: center;
+    text-align: center;
+    line-height: 200px;
+}
+ .fixed-data table th, 
+    .fixed-data table td {
+        padding: 5px;
+        border: 1px solid #ddd;
+    }
+    
+    .fixed-data table th:first-child, 
+    .fixed-data table td:first-child {
+        background-color: #373e4a;
+        color: white;
+    }
+    
+    .fixed-data table th {
+        background-color: #373e4a;
+        color: white;
+    }
+    
+    .fixed-data table tr:first-child th {
+        background-color: #373e4a;
+        color: white;
+    }
+    
+    .card-content {
+        width: 100%; /* Ensure the card content takes full width */
+        overflow-x: auto; /* Add horizontal scroll if needed */
+    }
+    
+
     </style>
 </head>
 <body class="hold-transition sidebar-mini">
@@ -166,7 +204,7 @@ if (isset($_POST['FINAL_SUBMIT'])) {
 
 ?>
 
-<div class="container">
+<div class="container" style="z-index:100;overflow:hidden;width:100%">
     <h3 style="text-align: left;color:red">Task ID :
         <?php
         if (isset($_GET['task'])) {
@@ -197,8 +235,32 @@ if (isset($_POST['FINAL_SUBMIT'])) {
         }
         ?>
     </h6>
-    <div class="fixed-data">
+    <div id="parentDiv" style="width:100%;height:400px;position:relative;overflow-x: auto;
+    overflow-y: auto;resize: vertical;">
+        <div id="zoomDiv" class="fixed-data zoomable-content">
+        <div class="fixed-data">
         <table>
+        <thead>
+            <tr>
+                <th>sl No</th> <!-- Add this header for the sl number -->
+                <th>Col1</th>
+                <th>Col2</th>
+                <th>Col3</th>
+                <th>Col4</th>
+                <th>Col5</th>
+                <th>Col6</th>
+                <th>Col7</th>
+                <th>Col8</th>
+                <th>Col9</th>
+                <th>Col10</th>
+                <th>Col11</th>
+                <th>Col12</th>
+                <th>Col13</th>
+                <th>Col14</th>
+                <th>Col15</th>
+            </tr>
+        </thead>
+        <tbody>    
             <?php
             $rowid = 1;
             foreach ($fixed_data as $row) {
@@ -209,6 +271,7 @@ if (isset($_POST['FINAL_SUBMIT'])) {
                 }
             ?>
                 <tr>
+                    <td><?= $rowid ?></td> <!-- Display row number here -->
                     <td><span><?= $row['col1'] ?></span></td>
                     <td><span><?= $row['col2'] ?></span></td>
                     <td><span><?= $row['col3'] ?></span></td>
@@ -232,6 +295,7 @@ if (isset($_POST['FINAL_SUBMIT'])) {
 
         </table>
 
+    </div>
     </div>
     <br>
     <hr>
@@ -485,10 +549,7 @@ e.preventDefault();
 
         </div>
         <!-- /.card-body -->
-        <div class="card-footer">
-          Footer
-        </div>
-        <!-- /.card-footer-->
+        
       </div>
       <!-- /.card -->
 
@@ -497,12 +558,7 @@ e.preventDefault();
   </div>
   <!-- /.content-wrapper -->
 
-  <footer class="main-footer">
-    <div class="float-right d-none d-sm-block">
-      <b>Version</b> 3.2.0
-    </div>
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
-  </footer>
+ 
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
@@ -511,6 +567,47 @@ e.preventDefault();
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
+
+
+
+<script>
+let zoomLevel = 1;
+const zoomDiv = document.getElementById('zoomDiv');
+const parentDiv = document.getElementById('parentDiv');
+
+// Function to update zoom position based on user's interaction point
+function updateZoomOrigin(clientX, clientY) {
+    const rect = parentDiv.getBoundingClientRect();
+    
+    const offsetX = clientX - rect.left;
+    const offsetY = clientY - rect.top;
+    
+    const originX = (offsetX / parentDiv.offsetWidth) * 100;
+    const originY = (offsetY / parentDiv.offsetHeight) * 100;
+    
+    zoomDiv.style.transformOrigin = `${originX}% ${originY}%`;
+}
+
+// Zoom using CTRL + Scroll
+parentDiv.addEventListener('wheel', function(event) {
+    if (!event.ctrlKey) return; // Only zoom if CTRL key is pressed
+
+    event.preventDefault(); // Prevent default scroll behavior
+    
+    // Update the transform-origin based on mouse position
+    updateZoomOrigin(event.clientX, event.clientY);
+    
+    // Adjust zoom level
+    if (event.deltaY < 0) {
+        zoomLevel += 0.1; // Zoom in
+    } else {
+        zoomLevel = Math.max(0.1, zoomLevel - 0.1); // Zoom out, with a minimum limit
+    }
+    
+    // Apply zoom
+    zoomDiv.style.transform = `scale(${zoomLevel})`;
+});
+</script>
 
 <!-- jQuery -->
 <script src="./plugins/jquery/jquery.min.js"></script>

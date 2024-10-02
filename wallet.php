@@ -220,9 +220,9 @@ to get the desired effect
   <script src="dist/js/demo.js"></script>
   <script src="dist/js/pages/dashboard3.js"></script>
   <script>
-    $(function () {
+      $(function () {
     $("#example1").DataTable({
-      "responsive": true, "lengthChange": true, "autoWidth": false,
+      "responsive": false, "scrollX": true, "lengthChange": true, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     $('#example2').DataTable({
@@ -232,7 +232,7 @@ to get the desired effect
       "ordering": true,
       "info": true,
       "autoWidth": false,
-      "responsive": true,
+      "responsive": false,
     });
   });
   </script>
